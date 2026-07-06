@@ -15,7 +15,6 @@
       --sispa-navy: #172A45;
       --sispa-orange: #FF6B00;
       --sispa-orange-hover: #E05E00;
-      --sispa-light: #F4F6F9;
       --sispa-border: #2C3E50;
     }
     body {
@@ -23,9 +22,7 @@
       background-color: var(--sispa-blue);
       color: #E6F1FF;
     }
-    .heading-font {
-      font-family: 'Lexend', sans-serif;
-    }
+    .heading-font { font-family: 'Lexend', sans-serif; }
     .tactical-card {
       background-color: var(--sispa-navy);
       border: 2px solid var(--sispa-border);
@@ -39,31 +36,24 @@
     .tactical-input:focus {
       border-color: var(--sispa-orange);
       outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
     }
     .btn-tactical {
       background-color: var(--sispa-orange);
       color: #0A192F;
       font-weight: 700;
-      transition: all 0.2s ease;
     }
     .btn-tactical:hover {
       background-color: var(--sispa-orange-hover);
-      transform: translate(-2px, -2px);
-      box-shadow: 2px 2px 0px 0px #FFFFFF;
     }
     .loader {
       border: 3px solid rgba(255,255,255,0.1);
       border-radius: 50%;
       border-top: 3px solid var(--sispa-orange);
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-orange-500 selection:text-white">
@@ -73,26 +63,26 @@
       <div class="flex items-center space-x-3">
         <div class="w-3 h-8 bg-[#FF6B00]"></div>
         <div>
-          <h1 class="heading-font text-lg font-extrabold tracking-wider text-white">IPG KDA <span class="text-[#FF6B00]">SISPA 2026</span></h1>
-          <p class="text-[10px] text-gray-400 tracking-tight font-mono">PORTAL PENTAKSIRAN BERTERUSAN MPU3481b</p>
+          <h1 class="heading-font text-lg font-extrabold text-white">IPG KDA <span class="text-[#FF6B00]">SISPA 2026</span></h1>
+          <p class="text-[10px] text-gray-400 font-mono">PORTAL PENTAKSIRAN BERTERUSAN MPU3481b</p>
         </div>
       </div>
       <div id="userInfo" class="hidden text-right text-xs bg-slate-800 px-3 py-1.5 border border-slate-700 rounded">
-        <span class="text-gray-400 font-mono">ID: </span><span id="userBadgeName" class="font-bold text-orange-400">-</span>
-        <button onclick="logKeluar()" class="ml-3 text-red-400 hover:underline font-bold font-mono">KLUAR</button>
+        <span id="userBadgeName" class="font-bold text-orange-400">-</span>
+        <button onclick="logKeluar()" class="ml-3 text-red-400 hover:underline font-bold font-mono">KELUAR</button>
       </div>
     </div>
   </header>
 
-  <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+  <main class="flex-grow flex items-center justify-center p-4">
     <div class="w-full max-w-7xl mx-auto">
       
       <section id="sectionLogin" class="max-w-md mx-auto tactical-card p-6 sm:p-8 rounded-none">
-        <div class="text-center mb-8">
-          <div class="inline-block px-3 py-1 bg-orange-600/10 border border-orange-500/30 text-orange-400 text-xs font-mono uppercase tracking-widest mb-2">
-            Pangkalan Akses Kawalan
+        <div class="text-center mb-6">
+          <div class="inline-block px-3 py-1 bg-orange-600/10 border border-orange-500/30 text-orange-400 text-xs font-mono uppercase mb-2">
+            Pangkalan Kawalan Akses
           </div>
-          <h2 class="heading-font text-xl font-bold text-white tracking-tight">Sistem Pemarkahan Amali</h2>
+          <h2 class="heading-font text-lg font-bold text-white">Sistem Pemarkahan Amali</h2>
         </div>
 
         <div class="flex border-b border-slate-700 mb-6">
@@ -106,10 +96,10 @@
 
         <div id="formLoginPelajar" class="space-y-4">
           <div>
-            <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-1">No. Kad Pengenalan</label>
-            <input type="text" id="inputKP" placeholder="Contoh: 030415101234" class="w-full p-3 tactical-input font-mono text-sm tracking-widest">
+            <label class="block text-xs font-mono text-gray-400 mb-1">No. Kad Pengenalan (Sila isi angka sahaja)</label>
+            <input type="text" id="inputKP" placeholder="Contoh: 030415101234" class="w-full p-3 tactical-input font-mono text-sm">
           </div>
-          <button onclick="prosesMasukPelajar()" class="w-full py-3.5 btn-tactical uppercase tracking-wider text-xs flex justify-center items-center space-x-2">
+          <button onclick="prosesMasukPelajar()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
             <span>Sahkan Identiti Kadet</span>
             <div id="spinPelajar" class="loader hidden"></div>
           </button>
@@ -117,82 +107,68 @@
 
         <div id="formLoginPensyarah" class="space-y-4 hidden">
           <div>
-            <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-1">Kata Laluan Pentadbiran</label>
+            <label class="block text-xs font-mono text-gray-400 mb-1">Kata Laluan Pentadbiran</label>
             <input type="password" id="inputKatalaluan" placeholder="••••••••" class="w-full p-3 tactical-input text-sm font-mono">
           </div>
-          <button onclick="prosesMasukPensyarah()" class="w-full py-3.5 btn-tactical uppercase tracking-wider text-xs flex justify-center items-center space-x-2">
+          <button onclick="prosesMasukPensyarah()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
             <span>Masuk Portal Penilai</span>
             <div id="spinPensyarah" class="loader hidden"></div>
           </button>
         </div>
         
-        <div id="loginMsg" class="mt-4 text-center text-xs text-red-400 font-mono hidden"></div>
+        <div id="loginMsg" class="mt-4 p-3 bg-red-950/40 border border-red-900/60 text-center text-xs text-red-400 font-mono hidden rounded"></div>
       </section>
 
-      <section id="sectionPelajar" class="hidden max-w-2xl mx-auto tactical-card p-6 sm:p-8 rounded-none">
+      <section id="sectionPelajar" class="hidden max-w-2xl mx-auto tactical-card p-6 rounded-none">
         <div class="border-b border-slate-700 pb-4 mb-6">
-          <span class="text-xs font-mono bg-blue-900/50 text-blue-400 border border-blue-800 px-2 py-0.5 rounded">DATA PROFILE SQUAD</span>
+          <span class="text-xs font-mono bg-blue-900/50 text-blue-400 border border-blue-800 px-2 py-0.5 rounded">PROFIL SQUAD KADET</span>
           <h2 id="pelajarNamaHeader" class="heading-font text-xl font-bold text-white mt-2">-</h2>
           <p id="pelajarKPHeader" class="text-xs text-gray-400 font-mono mt-0.5">-</p>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="text-center md:col-span-1">
-            <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-2">Foto Unifor Semasa</label>
             <div class="w-full aspect-[3/4] bg-slate-900 border border-slate-700 flex flex-col items-center justify-center relative overflow-hidden">
               <img id="previewGambar" src="" class="w-full h-full object-cover hidden">
-              <div id="placeholderGambar" class="text-center p-2 text-slate-500">
-                <svg class="w-8 h-8 mx-auto mb-1 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="text-[10px] uppercase font-bold tracking-wider font-mono">NO IMAGE DATA</span>
-              </div>
+              <div id="placeholderGambar" class="text-[10px] text-slate-500 font-mono">TIADA DATA FOTO</div>
             </div>
           </div>
-
           <div class="md:col-span-2 space-y-4">
             <div>
-              <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-1">Nombor Badan Kor SISPA</label>
-              <input type="text" id="studentNoBadan" placeholder="Contoh: SISPA/2026/045" class="w-full p-3 tactical-input font-mono text-sm tracking-wide">
+              <label class="block text-xs font-mono text-gray-400 mb-1">Nombor Badan Kor SISPA</label>
+              <input type="text" id="studentNoBadan" placeholder="SISPA/2026/045" class="w-full p-3 tactical-input font-mono text-sm">
             </div>
             <div>
-              <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-1">Muat Naik Foto Baharu (JPG/PNG)</label>
-              <input type="file" id="studentFile" accept="image/*" onchange="bacaFailGambar(this)" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-none file:border-0 file:text-xs file:font-mono file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+              <label class="block text-xs font-mono text-gray-400 mb-1">Foto Unifor Terkini (JPG/PNG)</label>
+              <input type="file" id="studentFile" accept="image/*" onchange="bacaFailGambar(this)" class="w-full text-xs text-slate-400">
             </div>
-            
-            <div class="pt-4">
-              <button onclick="hantarKemaskiniPelajar()" class="w-full py-3 btn-tactical text-xs tracking-wider uppercase flex justify-center items-center space-x-2">
-                <span>Kemaskini Fail Profil</span>
-                <div id="spinUpdatePelajar" class="loader hidden"></div>
-              </button>
-            </div>
+            <button onclick="hantarKemaskiniPelajar()" class="w-full py-3 btn-tactical text-xs uppercase flex justify-center items-center space-x-2">
+              <span>Kemaskini Fail Profil</span>
+              <div id="spinUpdatePelajar" class="loader hidden"></div>
+            </button>
           </div>
         </div>
       </section>
 
-      <section id="sectionDashboardPensyarah" class="hidden space-y-6">
+      <section id="sectionDashboardPensyarah" class="hidden space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#172A45] p-4 border border-[#2C3E50]">
           <div>
-            <span class="text-xs font-mono bg-orange-600/10 border border-orange-500/30 text-orange-400 px-2 py-0.5 rounded">IPG KAMPUS DARULAMAN MALAYSIA</span>
-            <h2 class="heading-font text-lg font-bold text-white mt-1">Pentaksiran Berterusan Kor SISPA II</h2>
+            <h2 class="heading-font text-base font-bold text-white">Pentaksiran Berterusan Kor SISPA II</h2>
           </div>
-          <div class="mt-3 sm:mt-0 w-full sm:w-72">
-            <input type="text" id="carianPelajar" oninput="tapisPelajar()" placeholder="Tapis nama atau No. KP..." class="w-full p-2.5 tactical-input text-xs font-mono">
-          </div>
+          <input type="text" id="carianPelajar" oninput="tapisPelajar()" placeholder="Cari nama atau No. KP..." class="w-full sm:w-72 p-2 tactical-input text-xs font-mono mt-2 sm:mt-0">
         </div>
-
         <div class="bg-slate-900 border border-slate-800 overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="border-b border-slate-800 bg-slate-950 font-mono text-[11px] uppercase text-gray-400 tracking-wider">
+              <tr class="border-b border-slate-800 bg-slate-950 font-mono text-gray-400 uppercase">
                 <th class="p-4 w-16">Foto</th>
-                <th class="p-4">Nama Penuh Kadet</th>
+                <th class="p-4">Nama Kadet</th>
                 <th class="p-4">No. Kad Pengenalan</th>
                 <th class="p-4">No. Badan</th>
                 <th class="p-4 text-center">Skor Akhir (100%)</th>
                 <th class="p-4 text-right">Tindakan</th>
               </tr>
             </thead>
-            <tbody id="senaraiPelajarBody" class="divide-y divide-slate-800 text-xs">
-              </tbody>
+            <tbody id="senaraiPelajarBody" class="divide-y divide-slate-800"></tbody>
           </table>
         </div>
       </section>
@@ -200,253 +176,102 @@
       <section id="sectionBorangPemarkahan" class="hidden space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-700 pb-4 gap-4">
           <div>
-            <button onclick="kembaliKeDashboard()" class="text-xs text-orange-400 hover:underline flex items-center space-x-1 font-mono tracking-tight">
-              <span>← KEMBALI KE PANEL PENSYARAH</span>
-            </button>
-            <h2 id="nilaiNama" class="heading-font text-xl font-bold text-white mt-2">-</h2>
-            <p id="nilaiDetail" class="text-xs text-gray-400 font-mono mt-0.5">-</p>
+            <button onclick="kembaliKeDashboard()" class="text-xs text-orange-400 hover:underline font-mono">← KEMBALI</button>
+            <h2 id="nilaiNama" class="heading-font text-lg font-bold text-white mt-1">-</h2>
+            <p id="nilaiDetail" class="text-xs text-gray-400 font-mono">-</p>
           </div>
-          <div class="bg-slate-950 p-4 border border-slate-800 flex items-center space-x-6 min-w-[280px] justify-between">
+          <div class="bg-slate-950 p-3 border border-slate-800 flex items-center space-x-4">
             <div>
-              <div class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">Est. Skor Akhir</div>
-              <div id="skorBesar" class="heading-font text-3xl font-extrabold text-[#FF6B00]">0.0%</div>
+              <div class="text-[10px] font-mono text-gray-400">Est. Skor</div>
+              <div id="skorBesar" class="heading-font text-2xl font-extrabold text-[#FF6B00]">0.0%</div>
             </div>
-            <div class="text-right">
-              <div class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">Gred Unjuran</div>
-              <div id="gredBesar" class="text-sm font-bold font-mono tracking-widest text-slate-400 mt-1">-</div>
+            <div>
+              <div class="text-[10px] font-mono text-gray-400">Gred</div>
+              <div id="gredBesar" class="text-xs font-bold font-mono text-slate-400">-</div>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 space-y-6">
-            
-            <div class="tactical-card p-5 rounded-none space-y-6">
-              <div class="flex items-center justify-between border-b border-slate-700 pb-2">
-                <h3 class="heading-font font-bold text-xs tracking-widest text-orange-400 uppercase">TUGASAN 1: UJIAN AMALI (WAJARAN KESELURUHAN: 70%)</h3>
-                <span id="subtotalAmali" class="font-mono text-xs font-bold text-slate-400">0.00 / 70%</span>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">1. ASPEK PENGURUSAN PERKHEMAHAN (JUMLAH WAJARAN: 15%) [cite: 8]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Adaptasi Aktiviti (Wajaran: 10%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Pengurusan peralatan, tapak perkhemahan, jadual, taklimat, aktiviti riadah & perbarisan pagi[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a1_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+          <div class="lg:col-span-2 space-y-4">
+            <div class="tactical-card p-5 space-y-4">
+              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 1: UJIAN AMALI (70%) <span id="subtotalAmali" class="float-right text-white">0/70%</span></h3>
+              
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">1. Pengurusan Perkhemahan - HP3 (Wajaran 10%)</span>
+                  <input type="number" id="m_a1_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kepimpinan, Autonomi & Tanggungjawab (HP8) - Peranan Pasukan (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Keupayaan mengorganisasi kepimpinan dalam pasukan serta memainkan peranan aktif[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a1_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">2. Pengurusan Perkhemahan - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a1_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">2. ASPEK AMALI TALI DAN IKATAN (JUMLAH WAJARAN: 15%) [cite: 8]</span>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Kemahiran Membuat 5 Jenis Ikatan Simpulan (Wajaran: 15%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Kemahiran membuat ikatan gajet, menyatakan kegunaan, faedah serta objektif kraf perkhemahan[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a2_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">3. Amali Tali & Ikatan - HP3 (Wajaran 15%)</span>
+                  <input type="number" id="m_a2_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">3. ASPEK AMALI PENGURUSAN BENCANA (JUMLAH WAJARAN: 10%) [cite: 8]</span>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Simulasi & Arahan MKN No. 20 (Wajaran: 10%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Pengurusan Pusat Pemindahan Sementara (PPS), penyediaan menu masakan kelompok, sanitasi & simulasi bencana[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a3_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">4. Pengurusan Bencana - HP3 (Wajaran 10%)</span>
+                  <input type="number" id="m_a3_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">4. ASPEK AMALI NAVIGASI DARAT (JUMLAH WAJARAN: 10%) [cite: 8]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Pembacaan Peta Topo & Kompas (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Prosedur navigasi darat, membaca tanda, simbol grid, bearing serta taktik pergerakan lapangan[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a4_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">5. Navigasi Darat - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a4_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kepimpinan, Autonomi & Tanggungjawab (HP8) - Peranan Pasukan (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Keupayaan mengorganisasi kawalan kompas ahli, autonomi pergerakan taktis & tanggungjawab kumpulan[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a4_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">6. Navigasi Darat - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a4_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">5. ASPEK AMALI KEBUDAYAAN (JUMLAH WAJARAN: 10%) [cite: 8]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Pengurusan Malam Kebudayaan (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Mempamerkan mesej keamanan, nilai perpaduan & penguasaan lagu pertubuhan APM dalam persembahan[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a5_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">7. Amali Kebudayaan - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a5_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kepimpinan, Autonomi & Tanggungjawab (HP8) - Organisasi Pentas (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Keupayaan bekerjasama, membina koordinasi, disiplin kumpulan, & memimpin tugasan seni[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a5_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">8. Amali Kebudayaan - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a5_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">6. ASPEK AMALI KETERLIBATAN KOMUNITI (JUMLAH WAJARAN: 10%) [cite: 8]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Praktikal (HP3) - Khidmat Sukarelawan & Gaya Hidup Lestari (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Penglibatan khidmat masyarakat, kempen derma darah, & kelestarian ekosistem perkhemahan[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a6_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">9. Keterlibatan Komuniti - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a6_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kepimpinan, Autonomi & Tanggungjawab (HP8) - Pengurusan Hubungan Awam (Wajaran: 5%) [cite: 8]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Sangat memahami peranan sivik, bertindak aktif, serta berupaya memimpin komuniti dengan beradab[cite: 8].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_a6_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">10. Keterlibatan Komuniti - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a6_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
               </div>
             </div>
 
-            <div class="tactical-card p-5 rounded-none space-y-6">
-              <div class="flex items-center justify-between border-b border-slate-700 pb-2">
-                <h3 class="heading-font font-bold text-xs tracking-widest text-orange-400 uppercase">TUGASAN 2: LAPORAN REFLEKTIF (WAJARAN KESELURUHAN: 30%)</h3>
-                <span id="subtotalReflektif" class="font-mono text-xs font-bold text-slate-400">0.00 / 30%</span>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">1. ASPEK KEMAHIRAN KOGNITIF (JUMLAH WAJARAN: 10%) [cite: 11]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Kognitif (HP2) - Justifikasi Post-Mortem (Wajaran: 5%) [cite: 11]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Keupayaan kritikal menilai proses pra, semasa, & pasca-perkhemahan serta memberi cadangan solusi berpaut fakta[cite: 11].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_ref_hp2" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+            <div class="tactical-card p-5 space-y-4">
+              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 2: LAPORAN REFLEKTIF (30%) <span id="subtotalReflektif" class="float-right text-white">0/30%</span></h3>
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">11. Laporan Kognitif - HP2 (Wajaran 5%)</span>
+                  <input type="number" id="m_ref_hp2" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Pemikiran Komputasional (KKG1) - Analisis Konteks Jitu (Wajaran: 5%) [cite: 11]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Kebolehan mengaplikasi corak berfikir berstruktur, memecahkan isu logistik perkhemahan secara jelas & terperinci[cite: 11].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_ref_kkg1" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">12. Laporan Kognitif - KKG1 (Wajaran 5%)</span>
+                  <input type="number" id="m_ref_kkg1" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-              </div>
-
-              <div class="p-4 bg-slate-950 border border-slate-800 space-y-4">
-                <span class="text-[10px] font-mono tracking-wider bg-orange-500/10 text-orange-400 px-2 py-0.5 border border-orange-500/20 font-bold block w-max">2. ASPEK KEMAHIRAN KOMUNIKASI (JUMLAH WAJARAN: 20%) [cite: 11]</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Kemahiran Interpersonal (HP4) - Penyampaian Idea Laporan (Wajaran: 10%) [cite: 11]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Kebolehan menstruktur hujah secara bertulis, berkesan, penuh keyakinan & menarik minat audien akademik[cite: 11].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_ref_hp4" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">13. Kemahiran Komunikasi - HP4 (Wajaran 10%)</span>
+                  <input type="number" id="m_ref_hp4" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center border-t border-slate-900 pt-3">
-                  <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-gray-200">Suri Teladan & Etika (KMI3) - Tingkah Laku Positif Laporan (Wajaran: 10%) [cite: 11]</label>
-                    <p class="text-[10px] text-gray-400 mt-0.5">Nilai integriti kendiri, keupayaan memberi penghargaan murni kepada pihak lain & teladan yang terpancar dalam penulisan[cite: 11].</p>
-                  </div>
-                  <div class="flex items-center space-x-2 justify-end">
-                    <input type="number" id="m_ref_kmi3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-20 p-2 text-center tactical-input font-mono text-sm">
-                    <span class="text-xs font-mono text-gray-500">/100</span>
-                  </div>
+                <div class="flex justify-between bg-slate-950 p-2 border border-slate-800 rounded">
+                  <span class="w-3/4">14. Tingkah Laku Positif - KMI3 (Wajaran 10%)</span>
+                  <input type="number" id="m_ref_kmi3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="lg:col-span-1 space-y-6">
-            <div class="tactical-card p-5 rounded-none flex flex-col justify-between h-full min-h-[400px]">
-              <div>
-                <h3 class="heading-font font-bold text-[10px] tracking-widest text-gray-400 uppercase border-b border-slate-700 pb-2 mb-4">Ulasan Penilai Jaminan Kualiti</h3>
-                
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-[10px] font-mono uppercase text-gray-400 mb-1">Ulasan Pentaksir Rasmi</label>
-                    <textarea id="ulasanPentaksir" rows="8" placeholder="Masukkan ulasan profesional berkaitan disiplin, kepemimpinan lapangan dan portfolio reflektif kadet..." class="w-full p-3 tactical-input text-xs"></textarea>
-                  </div>
-
-                  <div class="bg-slate-950 p-4 border border-slate-800 font-mono text-[10px] space-y-1 text-gray-400">
-                    <span class="text-orange-400 font-bold block mb-1">PANDUAN GRED IPG KDA</span>
-                    <div>80.0% - 100.0% : Cemerlang</div>
-                    <div>60.0% - 79.9% : Kepujian</div>
-                    <div>40.0% - 59.9% : Lulus</div>
-                    <div>00.0% - 39.9% : Gagal</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="pt-6">
-                <button onclick="hantarPemarkahan()" class="w-full py-4 btn-tactical uppercase tracking-wider text-xs font-bold flex justify-center items-center space-x-2">
-                  <span>Kunci Markah Mentah</span>
-                  <div id="spinSimpanMarkah" class="loader hidden"></div>
-                </button>
-              </div>
+          <div class="lg:col-span-1">
+            <div class="tactical-card p-4 space-y-4">
+              <label class="block text-xs font-mono text-gray-400">Ulasan Pentaksir Profesional</label>
+              <textarea id="ulasanPentaksir" rows="6" class="w-full p-2 text-xs tactical-input" placeholder="Tulis ulasan..."></textarea>
+              <button onclick="hantarPemarkahan()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
+                <span>Kunci Markah Mentah</span>
+                <div id="spinSimpanMarkah" class="loader hidden"></div>
+              </button>
             </div>
           </div>
         </div>
@@ -455,32 +280,22 @@
     </div>
   </main>
 
-  <footer class="border-t border-slate-800 bg-[#0A192F] py-4 text-center text-[10px] text-gray-500 font-mono tracking-wider">
-    &copy; 2026 KOR SISPA INSTITUT PENDIDIKAN GURU KAMPUS DARULAMAN. ALL RIGHTS RESERVED.
-  </footer>
-
   <script>
-    let databasePelajar = [];
-    let pelajarAktif = null;
+    let databasePelajar = [], pelajarAktif = null;
     let base64GambarData = null, base64GambarMime = "", base64GambarNama = "";
 
     function tukarTabLogMasuk(tab) {
-      const tPelajar = document.getElementById('tabPelajar');
-      const tPensyarah = document.getElementById('tabPensyarah');
-      const fPelajar = document.getElementById('formLoginPelajar');
-      const fPensyarah = document.getElementById('formLoginPensyarah');
       document.getElementById('loginMsg').classList.add('hidden');
-
       if (tab === 'pelajar') {
-        tPelajar.className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
-        tPensyarah.className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
-        fPelajar.classList.remove('hidden');
-        fPensyarah.classList.add('hidden');
+        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
+        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
+        document.getElementById('formLoginPelajar').classList.remove('hidden');
+        document.getElementById('formLoginPensyarah').classList.add('hidden');
       } else {
-        tPensyarah.className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
-        tPelajar.className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
-        fPensyarah.classList.remove('hidden');
-        fPelajar.classList.add('hidden');
+        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
+        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
+        document.getElementById('formLoginPensyarah').classList.remove('hidden');
+        document.getElementById('formLoginPelajar').classList.add('hidden');
       }
     }
 
@@ -488,16 +303,22 @@
       const kp = document.getElementById('inputKP').value.trim();
       const msg = document.getElementById('loginMsg');
       const spin = document.getElementById('spinPelajar');
-      if(!kp) { pamerMesejLogMasuk('Sila isi Nombor Kad Pengenalan.'); return; }
+      
+      if(!kp) { msg.textContent = 'Sila masukkan IC.'; msg.classList.remove('hidden'); return; }
       msg.classList.add('hidden'); spin.classList.remove('hidden');
 
+      // Sistem hantaran dengan pengesanan ralat terus
       google.script.run
         .withSuccessHandler(function(respons) {
           spin.classList.add('hidden');
           if (respons.status === 'SUCCESS') { pelajarAktif = respons.data; bukaPortalPelajar(); } 
-          else { pamerMesejLogMasuk(respons.mesej); }
+          else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
         })
-        .withFailureHandler(function() { spin.classList.add('hidden'); pamerMesejLogMasuk('Ralat sambungan pelayan.'); })
+        .withFailureHandler(function(err) {
+          spin.classList.add('hidden');
+          msg.textContent = "Ralat Kritikal Google: " + (err ? err.message : 'Akses disekat.');
+          msg.classList.remove('hidden');
+        })
         .logMasukPelajar(kp);
     }
 
@@ -505,34 +326,28 @@
       const pass = document.getElementById('inputKatalaluan').value;
       const msg = document.getElementById('loginMsg');
       const spin = document.getElementById('spinPensyarah');
-
       if (pass === 'sispa2026') {
         msg.classList.add('hidden'); spin.classList.remove('hidden');
         google.script.run
           .withSuccessHandler(function(respons) {
             spin.classList.add('hidden');
             if(respons.status === 'SUCCESS') { databasePelajar = respons.senarai; bukaDashboardPensyarah(); } 
-            else { pamerMesejLogMasuk('Gagal memuat pangkalan data kadet.'); }
+            else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
           })
-          .withFailureHandler(function() { spin.classList.add('hidden'); pamerMesejLogMasuk('Ralat sistem server.'); })
+          .withFailureHandler(function(err) { spin.classList.add('hidden'); msg.textContent = err.message; msg.classList.remove('hidden'); })
           .dapatkanSenaraiPelajar();
-      } else { pamerMesejLogMasuk('Kata Laluan Pentadbiran Salah!'); }
-    }
-
-    function pamerMesejLogMasuk(teks) {
-      const msg = document.getElementById('loginMsg');
-      msg.textContent = teks; msg.classList.remove('hidden');
+      } else { msg.textContent = 'Kata Laluan Pentadbiran Salah!'; msg.classList.remove('hidden'); }
     }
 
     function bukaPortalPelajar() {
       document.getElementById('sectionLogin').classList.add('hidden');
       document.getElementById('sectionPelajar').classList.remove('hidden');
       document.getElementById('userInfo').classList.remove('hidden');
-      document.getElementById('userBadgeName').textContent = "KADET: " + pelajarAktif.nama;
+      document.getElementById('userBadgeName').textContent = pelajarAktif.nama;
       document.getElementById('pelajarNamaHeader').textContent = pelajarAktif.nama;
-      document.getElementById('pelajarKPHeader').textContent = "NO. KP: " + pelajarAktif.noKP;
-      document.getElementById('studentNoBadan').value = pelajarAktif.noBadan || '';
-      if(pelajarAktif.gambarUrl) { pamerGambarPreview(pelajarAktif.gambarUrl); }
+      document.getElementById('pelajarKPHeader').textContent = "IC: " + pelajarAktif.noKP;
+      document.getElementById('studentNoBadan').value = pelajarAktif.noBadan;
+      if(pelajarAktif.gambarUrl) pamerGambarPreview(pelajarAktif.gambarUrl);
     }
 
     function bacaFailGambar(input) {
@@ -552,81 +367,48 @@
 
     function pamerGambarPreview(url) {
       const img = document.getElementById('previewGambar');
-      const placeholder = document.getElementById('placeholderGambar');
       let formattedUrl = url;
       if(url.includes('drive.google.com/file/d/')) {
-        const fileId = url.split('/d/')[1].split('/')[0];
-        formattedUrl = 'https://docs.google.com/uc?export=view&id=' + fileId;
+        formattedUrl = 'https://docs.google.com/uc?export=view&id=' + url.split('/d/')[1].split('/')[0];
       }
-      img.src = formattedUrl; img.classList.remove('hidden'); placeholder.classList.add('hidden');
+      img.src = formattedUrl; img.classList.remove('hidden');
+      document.getElementById('placeholderGambar').classList.add('hidden');
     }
 
     function hantarKemaskiniPelajar() {
       const noBadan = document.getElementById('studentNoBadan').value.trim();
       const spin = document.getElementById('spinUpdatePelajar');
-      if(!noBadan) { alert("Sila isi Nombor Badan Kadet."); return; }
+      if(!noBadan) { alert("Isi no badan."); return; }
       spin.classList.remove('hidden');
-
-      const payload = { row: pelajarAktif.row, noBadan: noBadan, fileData: base64GambarData, fileName: base64GambarNama, fileType: base64GambarMime };
       google.script.run
-        .withSuccessHandler(function(respons) {
-          spin.classList.add('hidden'); alert(respons.mesej);
-          if(respons.gambarUrl) { pelajarAktif.gambarUrl = respons.gambarUrl; }
-        })
-        .withFailureHandler(function() { spin.classList.add('hidden'); alert("Ralat kritikal fail."); })
-        .kemaskiniProfilPelajar(payload);
+        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); })
+        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
+        .kemaskiniProfilPelajar({ row: pelajarAktif.row, noBadan: noBadan, fileData: base64GambarData, fileName: base64GambarNama, fileType: base64GambarMime });
     }
 
     function bukaDashboardPensyarah() {
       document.getElementById('sectionLogin').classList.add('hidden');
       document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
       document.getElementById('userInfo').classList.remove('hidden');
-      document.getElementById('userBadgeName').textContent = "PENSYARAH_PENILAI";
+      document.getElementById('userBadgeName').textContent = "PENSYARAH";
       binaJadualPelajar(databasePelajar);
     }
 
     function binaJadualPelajar(senarai) {
       const tbody = document.getElementById('senaraiPelajarBody');
       tbody.innerHTML = '';
-      if(senarai.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500 font-mono">Tiada rekod data kadet ditemui.</td></tr>`;
-        return;
-      }
-
       senarai.forEach(function(p, indeks) {
-        let textMarkah = p.markahAkhir !== null ? `<span class="font-bold text-orange-400 font-mono">${p.markahAkhir.toFixed(1)}%</span>` : `<span class="text-gray-600 font-mono text-[11px]">Belum Dinilai</span>`;
-        let thumb = `<div class="w-8 h-8 rounded bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden"><svg class="w-3 h-3 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>`;
-        if(p.gambarUrl) {
-          let formattedUrl = p.gambarUrl;
-          if(p.gambarUrl.includes('drive.google.com/file/d/')) {
-            const fileId = p.gambarUrl.split('/d/')[1].split('/')[0];
-            formattedUrl = 'https://docs.google.com/uc?export=view&id=' + fileId;
-          }
-          thumb = `<img src="${formattedUrl}" class="w-8 h-8 object-cover rounded border border-slate-700">`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-800/40 border-b border-slate-800 transition-colors";
-        tr.innerHTML = `
-          <td class="p-4">${thumb}</td>
-          <td class="p-4 font-bold text-white tracking-tight">${p.nama}</td>
-          <td class="p-4 font-mono text-gray-400 tracking-wider">${p.noKP}</td>
-          <td class="p-4 font-mono text-slate-300">${p.noBadan}</td>
-          <td class="p-4 text-center">${textMarkah}</td>
-          <td class="p-4 text-right">
-            <button onclick="bukaBorangPenilaian(${indeks})" class="px-2.5 py-1.5 bg-slate-800 border border-slate-700 hover:border-orange-500 hover:text-orange-400 text-[10px] font-mono font-bold tracking-tight transition-all">
-              REKOD MARKAH MENTAH
-            </button>
-          </td>
-        `;
+        let txtM = p.markahAkhir !== null ? `<span class="font-bold text-orange-400 font-mono">${p.markahAkhir.toFixed(1)}%</span>` : `<span class="text-gray-600 font-mono">-</span>`;
+        let tr = document.createElement('tr');
+        tr.className = "border-b border-slate-800 hover:bg-slate-800/30";
+        tr.innerHTML = `<td class="p-4">...</td><td class="p-4 font-bold text-white">${p.nama}</td><td class="p-4 font-mono text-gray-400">${p.noKP}</td><td class="p-4 font-mono text-slate-300">${p.noBadan}</td><td class="p-4 text-center">${txtM}</td><td class="p-4 text-right"><button onclick="bukaBorangPenilaian(${indeks})" class="px-2 py-1 bg-slate-800 border border-slate-700 text-orange-400 hover:bg-orange-500 hover:text-black font-bold uppercase">NILAI</button></td>`;
         tbody.appendChild(tr);
       });
     }
 
     function tapisPelajar() {
-      const carian = document.getElementById('carianPelajar').value.toLowerCase();
-      const hasilTapis = databasePelajar.filter(p => p.nama.toLowerCase().includes(carian) || p.noKP.toLowerCase().includes(carian));
-      binaJadualPelajar(hasilTapis);
+      const c = document.getElementById('carianPelajar').value.toLowerCase();
+      binaJadualPelajar(databasePelajar.filter(p => p.nama.toLowerCase().includes(c) || p.noKP.toLowerCase().includes(c)));
     }
 
     function bukaBorangPenilaian(indeks) {
@@ -634,108 +416,53 @@
       document.getElementById('sectionDashboardPensyarah').classList.add('hidden');
       document.getElementById('sectionBorangPemarkahan').classList.remove('hidden');
       document.getElementById('nilaiNama').textContent = pelajarAktif.nama;
-      document.getElementById('nilaiDetail').textContent = `NO. BADAN: ${pelajarAktif.noBadan} | KAD PENGENALAN: ${pelajarAktif.noKP}`;
-      
-      const inputs = ['m_a1_hp3', 'm_a1_hp8', 'm_a2_hp3', 'm_a3_hp3', 'm_a4_hp3', 'm_a4_hp8', 'm_a5_hp3', 'm_a5_hp8', 'm_a6_hp3', 'm_a6_hp8', 'm_ref_hp2', 'm_ref_kkg1', 'm_ref_hp4', 'm_ref_kmi3'];
-      inputs.forEach(id => document.getElementById(id).value = 0);
-      document.getElementById('ulasanPentaksir').value = '';
+      document.getElementById('nilaiDetail').textContent = `IC: ${pelajarAktif.noKP}`;
       kiraSkorMasaNyata();
     }
 
     function kembaliKeDashboard() {
       document.getElementById('sectionBorangPemarkahan').classList.add('hidden');
       document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
-      google.script.run.withSuccessHandler(function(respons) {
-        if(respons.status === 'SUCCESS') { databasePelajar = respons.senarai; bukaDashboardPensyarah(); }
-      }).dapatkanSenaraiPelajar();
     }
 
     function kiraSkorMasaNyata() {
-      const parseValue = id => {
-        let val = parseFloat(document.getElementById(id).value) || 0;
-        if(val > 100) { val = 100; document.getElementById(id).value = 100; }
-        if(val < 0) { val = 0; document.getElementById(id).value = 0; }
-        return val;
-      };
+      const gv = id => { let v = parseFloat(document.getElementById(id).value) || 0; if(v>100)v=100; if(v<0)v=0; return v; };
+      const subA = (gv('m_a1_hp3')*0.1)+(gv('m_a1_hp8')*0.05)+(gv('m_a2_hp3')*0.15)+(gv('m_a3_hp3')*0.1)+(gv('m_a4_hp3')*0.05)+(gv('m_a4_hp8')*0.05)+(gv('m_a5_hp3')*0.05)+(gv('m_a5_hp8')*0.05)+(gv('m_a6_hp3')*0.05)+(gv('m_a6_hp8')*0.05);
+      const subB = (gv('m_ref_hp2')*0.05)+(gv('m_ref_kkg1')*0.05)+(gv('m_ref_hp4')*0.1)+(gv('m_ref_kmi3')*0.1);
+      const total = subA + subB;
 
-      const a1_hp3 = parseValue('m_a1_hp3'), a1_hp8 = parseValue('m_a1_hp8');
-      const a2_hp3 = parseValue('m_a2_hp3');
-      const a3_hp3 = parseValue('m_a3_hp3');
-      const a4_hp3 = parseValue('m_a4_hp3'), a4_hp8 = parseValue('m_a4_hp8');
-      const a5_hp3 = parseValue('m_a5_hp3'), a5_hp8 = parseValue('m_a5_hp8');
-      const a6_hp3 = parseValue('m_a6_hp3'), a6_hp8 = parseValue('m_a6_hp8');
-
-      const ref_hp2 = parseValue('m_ref_hp2'), ref_kkg1 = parseValue('m_ref_kkg1');
-      const ref_hp4 = parseValue('m_ref_hp4'), ref_kmi3 = parseValue('m_ref_kmi3');
-
-      const subtotalA = (a1_hp3 * 0.1) + (a1_hp8 * 0.05) + (a2_hp3 * 0.15) + (a3_hp3 * 0.1) + (a4_hp3 * 0.05) + (a4_hp8 * 0.05) + (a5_hp3 * 0.05) + (a5_hp8 * 0.05) + (a6_hp3 * 0.05) + (a6_hp8 * 0.05);
-      const subtotalB = (ref_hp2 * 0.05) + (ref_kkg1 * 0.05) + (ref_hp4 * 0.1) + (ref_kmi3 * 0.1);
-      const total = subtotalA + subtotalB;
-
-      document.getElementById('subtotalAmali').textContent = `${subtotalA.toFixed(2)} / 70%`;
-      document.getElementById('subtotalReflektif').textContent = `${subtotalB.toFixed(2)} / 30%`;
-      
-      const skorBesar = document.getElementById('skorBesar');
-      skorBesar.textContent = total.toFixed(1) + "%";
-      
-      const gredBesar = document.getElementById('gredBesar');
-      if (total >= 80) {
-        gredBesar.textContent = "CEMERLANG"; gredBesar.className = "text-sm font-bold font-mono text-emerald-400 mt-1";
-        skorBesar.className = "heading-font text-3xl font-extrabold text-emerald-400";
-      } else if (total >= 60) {
-        gredBesar.textContent = "KEPUJIAN"; gredBesar.className = "text-sm font-bold font-mono text-blue-400 mt-1";
-        skorBesar.className = "heading-font text-3xl font-extrabold text-blue-400";
-      } else if (total >= 40) {
-        gredBesar.textContent = "LULUS"; gredBesar.className = "text-sm font-bold font-mono text-yellow-400 mt-1";
-        skorBesar.className = "heading-font text-3xl font-extrabold text-yellow-400";
-      } else {
-        gredBesar.textContent = "GAGAL"; gredBesar.className = "text-sm font-bold font-mono text-red-500 mt-1";
-        skorBesar.className = "heading-font text-3xl font-extrabold text-red-500";
-      }
+      document.getElementById('subtotalAmali').textContent = subA.toFixed(1) + "/70%";
+      document.getElementById('subtotalReflektif').textContent = subB.toFixed(1) + "/30%";
+      document.getElementById('skorBesar').textContent = total.toFixed(1) + "%";
+      document.getElementById('gredBesar').textContent = total >= 80 ? "CEMERLANG" : total >= 60 ? "KEPUJIAN" : total >= 40 ? "LULUS" : "GAGAL";
     }
 
     function hantarPemarkahan() {
-      const ulasan = document.getElementById('ulasanPentaksir').value.trim();
-      const spin = document.getElementById('spinSimpanMarkah');
-      if(!ulasan) { alert("Sila masukkan ulasan penilai jaminan kualiti sebelum mengunci markah."); return; }
-      spin.classList.remove('hidden');
-
-      const payload = {
-        noKP: pelajarAktif.noKP, nama: pelajarAktif.nama, noBadan: pelajarAktif.noBadan,
-        rawA1_hp3: parseFloat(document.getElementById('m_a1_hp3').value) || 0,
-        rawA1_hp8: parseFloat(document.getElementById('m_a1_hp8').value) || 0,
-        rawA2_hp3: parseFloat(document.getElementById('m_a2_hp3').value) || 0,
-        rawA3_hp3: parseFloat(document.getElementById('m_a3_hp3').value) || 0,
-        rawA4_hp3: parseFloat(document.getElementById('m_a4_hp3').value) || 0,
-        rawA4_hp8: parseFloat(document.getElementById('m_a4_hp8').value) || 0,
-        rawA5_hp3: parseFloat(document.getElementById('m_a5_hp3').value) || 0,
-        rawA5_hp8: parseFloat(document.getElementById('m_a5_hp8').value) || 0,
-        rawA6_hp3: parseFloat(document.getElementById('m_a6_hp3').value) || 0,
-        rawA6_hp8: parseFloat(document.getElementById('m_a6_hp8').value) || 0,
-        rawRef_hp2: parseFloat(document.getElementById('m_ref_hp2').value) || 0,
-        rawRef_kkg1: parseFloat(document.getElementById('m_ref_kkg1').value) || 0,
-        rawRef_hp4: parseFloat(document.getElementById('m_ref_hp4').value) || 0,
-        rawRef_kmi3: parseFloat(document.getElementById('m_ref_kmi3').value) || 0,
-        ulasan: ulasan
-      };
-
+      const spin = document.getElementById('spinSimpanMarkah'); spin.classList.remove('hidden');
       google.script.run
-        .withSuccessHandler(function(respons) {
-          spin.classList.add('hidden'); alert(respons.mesej); kembaliKeDashboard();
-        })
-        .withFailureHandler(function() { spin.classList.add('hidden'); alert("Ralat kritikal ketika menyimpan markah mentah."); })
-        .simpanPemarkahan(payload);
+        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); kembaliKeDashboard(); })
+        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
+        .simpanPemarkahan({
+          noKP: pelajarAktif.noKP, nama: pelajarAktif.nama, noBadan: pelajarAktif.noBadan,
+          rawA1_hp3: parseFloat(document.getElementById('m_a1_hp3').value)||0,
+          rawA1_hp8: parseFloat(document.getElementById('m_a1_hp8').value)||0,
+          rawA2_hp3: parseFloat(document.getElementById('m_a2_hp3').value)||0,
+          rawA3_hp3: parseFloat(document.getElementById('m_a3_hp3').value)||0,
+          rawA4_hp3: parseFloat(document.getElementById('m_a4_hp3').value)||0,
+          rawA4_hp8: parseFloat(document.getElementById('m_a4_hp8').value)||0,
+          rawA5_hp3: parseFloat(document.getElementById('m_a5_hp3').value)||0,
+          rawA5_hp8: parseFloat(document.getElementById('m_a5_hp8').value)||0,
+          rawA6_hp3: parseFloat(document.getElementById('m_a6_hp3').value)||0,
+          rawA6_hp8: parseFloat(document.getElementById('m_a6_hp8').value)||0,
+          rawRef_hp2: parseFloat(document.getElementById('m_ref_hp2').value)||0,
+          rawRef_kkg1: parseFloat(document.getElementById('m_ref_kkg1').value)||0,
+          rawRef_hp4: parseFloat(document.getElementById('m_ref_hp4').value)||0,
+          rawRef_kmi3: parseFloat(document.getElementById('m_ref_kmi3').value)||0,
+          ulasan: document.getElementById('ulasanPentaksir').value
+        });
     }
 
-    function logKeluar() {
-      pelajarAktif = null;
-      document.getElementById('userInfo').classList.add('hidden');
-      document.getElementById('sectionPelajar').classList.add('hidden');
-      document.getElementById('sectionDashboardPensyarah').classList.add('hidden');
-      document.getElementById('sectionBorangPemarkahan').classList.add('hidden');
-      document.getElementById('sectionLogin').classList.remove('hidden');
-      document.getElementById('inputKP').value = ''; document.getElementById('inputKatalaluan').value = '';
-    }
+    function logKeluar() { location.reload(); }
   </script>
 </body>
 </html>
