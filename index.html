@@ -186,20 +186,78 @@ const GAS_API_URL = 'PASTE_URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI';
    SHIM: google.script.run
    Ini membolehkan kod di bawah (yang asalnya ditulis untuk dijalankan
    dalam HtmlService Apps Script) kekal SAMA, tetapi sebenarnya memanggil
-   Code.gs sebagai API luar melalui fetch(). Setiap kali "google.script.run"
-   diakses, satu "runner" baharu dicipta - sama seperti tingkah laku asal.
+   Code.gs sebagai API luar melalui fetch() GET. Setiap kali
+   "google.script.run" diakses, satu "runner" baharu dicipta - sama
+   seperti tingkah laku asal.
+
+   NOTA: Kita guna GET sahaja (bukan POST) sebab POST cross-origin ke
+   Apps Script Web App sering terkena ralat HTTP 405 disebabkan redirect
+   dalaman Google. Gambar (base64 besar) dihantar secara berperingkat
+   (chunk) supaya URL setiap permintaan kekal pendek.
    ===================================================================== */
+const CHUNK_SIZE = 2000; // aksara base64 setiap cebisan (selamat utk panjang URL)
+let jsonpCounter_ = 0;
+
 function callGAS_(action, args){
-  return fetch(GAS_API_URL, {
-    method: 'POST',
-    // Content-Type: text/plain mengelak "preflight" OPTIONS yang tidak
-    // disokong oleh Google Apps Script (punca biasa ralat CORS).
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action: action, args: args })
-  }).then(function(r){
-    if(!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
+  return new Promise(function(resolve, reject){
+    const callbackName = 'sispaCb_' + (jsonpCounter_++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    let timeoutId;
+
+    function cleanup(){
+      delete window[callbackName];
+      if(script.parentNode) script.parentNode.removeChild(script);
+      clearTimeout(timeoutId);
+    }
+
+    window[callbackName] = function(data){
+      if(settled) return;
+      settled = true;
+      cleanup();
+      resolve(data);
+    };
+
+    timeoutId = setTimeout(function(){
+      if(settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Masa menunggu tamat. Sila semak sambungan internet dan cuba lagi.'));
+    }, 20000);
+
+    script.onerror = function(){
+      if(settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Gagal menghubungi server. Sila semak sambungan internet.'));
+    };
+
+    const url = GAS_API_URL + '?action=' + encodeURIComponent(action) +
+      '&args=' + encodeURIComponent(JSON.stringify(args)) +
+      '&callback=' + callbackName;
+    script.src = url;
+    document.body.appendChild(script);
   });
+}
+
+function uploadPhotoInChunks_(nokp, dataUrl, mimeType, onSuccess, onFailure){
+  const base64 = dataUrl.split(',').pop();
+  const uploadId = 'up_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+  const totalChunks = Math.max(1, Math.ceil(base64.length / CHUNK_SIZE));
+
+  function sendChunk(i){
+    if(i >= totalChunks){
+      callGAS_('uploadPhotoFinish', [uploadId, nokp, mimeType])
+        .then(onSuccess).catch(onFailure);
+      return;
+    }
+    const chunk = base64.substr(i*CHUNK_SIZE, CHUNK_SIZE);
+    callGAS_('uploadPhotoChunk', [uploadId, i, totalChunks, chunk]).then(function(res){
+      if(!res.ok){ onFailure(new Error(res.message || 'Ralat memuat naik cebisan gambar.')); return; }
+      sendChunk(i+1);
+    }).catch(onFailure);
+  }
+  sendChunk(0);
 }
 
 function makeRunner_(){
@@ -216,8 +274,12 @@ function makeRunner_(){
   methodNames.forEach(function(name){
     runner[name] = function(){
       const args = Array.prototype.slice.call(arguments);
-      callGAS_(name, args).then(function(res){ successFn(res); })
-        .catch(function(err){ failureFn(err); });
+      if(name === 'uploadStudentPhoto'){
+        uploadPhotoInChunks_(args[0], args[1], args[2], function(res){ successFn(res); }, function(err){ failureFn(err); });
+      } else {
+        callGAS_(name, args).then(function(res){ successFn(res); })
+          .catch(function(err){ failureFn(err); });
+      }
       return runner;
     };
   });
