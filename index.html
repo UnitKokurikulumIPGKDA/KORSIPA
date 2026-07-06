@@ -1,468 +1,467 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Pemarkahan MPU3481b - KOR SISPA II</title>
-<style>
-  :root {
-    --navy: #0b2545;
-    --navy-light: #13315c;
-    --gold: #c9a227;
-    --bg: #f4f6f9;
-    --card: #ffffff;
-    --text: #1c2733;
-    --muted: #6b7684;
-    --danger: #c0392b;
-    --success: #1e7e34;
-    --radius: 10px;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background: var(--bg); color: var(--text);
-  }
-  header {
-    background: linear-gradient(135deg, var(--navy), var(--navy-light));
-    color: #fff; padding: 22px 20px; text-align: center;
-  }
-  header h1 { margin: 0; font-size: 1.25rem; letter-spacing: .5px; }
-  header p { margin: 4px 0 0; font-size: .85rem; opacity: .85; }
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
-  .card {
-    background: var(--card); border-radius: var(--radius);
-    box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px;
-  }
-  .roles { display: flex; gap: 16px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
-  .role-btn {
-    flex: 1 1 220px; max-width: 260px; padding: 26px 18px; border-radius: var(--radius);
-    background: var(--card); border: 2px solid #e1e6ec; cursor: pointer; text-align: center;
-    transition: .15s; font-size: 1rem; font-weight: 600; color: var(--navy);
-  }
-  .role-btn:hover { border-color: var(--gold); transform: translateY(-2px); }
-  label { display: block; font-size: .85rem; color: var(--muted); margin: 12px 0 4px; font-weight: 600; }
-  input[type=text], input[type=password], input[type=tel], input[type=email], select {
-    width: 100%; padding: 10px 12px; border: 1px solid #d3d9e0; border-radius: 6px; font-size: .95rem;
-  }
-  button.primary {
-    background: var(--navy); color: #fff; border: none; padding: 11px 22px;
-    border-radius: 6px; font-size: .95rem; cursor: pointer; font-weight: 600; margin-top: 16px;
-  }
-  button.primary:hover { background: var(--navy-light); }
-  button.secondary {
-    background: transparent; color: var(--navy); border: 1px solid var(--navy);
-    padding: 9px 18px; border-radius: 6px; cursor: pointer; font-weight: 600;
-  }
-  .msg { padding: 10px 14px; border-radius: 6px; margin-top: 12px; font-size: .9rem; display:none; }
-  .msg.error { background: #fdecea; color: var(--danger); display:block; }
-  .msg.success { background: #e9f7ef; color: var(--success); display:block; }
-  .hidden { display: none !important; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .photo-preview {
-    width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
-    border: 3px solid var(--gold); display: block; margin: 0 auto 12px;
-    background: #eee;
-  }
-  .grid-students {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 18px;
-  }
-  .student-tile {
-    background: var(--card); border: 1px solid #e5e9ee; border-radius: var(--radius);
-    padding: 14px; text-align: center; cursor: pointer; transition: .15s;
-  }
-  .student-tile:hover { box-shadow: 0 4px 10px rgba(0,0,0,.1); transform: translateY(-2px); }
-  .student-tile img {
-    width: 76px; height: 76px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; background:#eee;
-  }
-  .student-tile .nama { font-weight: 600; font-size: .88rem; margin: 4px 0 2px; }
-  .student-tile .kelas { font-size: .75rem; color: var(--muted); }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: .72rem; font-weight: 700; margin-top: 6px; }
-  .badge.done { background: #e9f7ef; color: var(--success); }
-  .badge.pending { background: #fdf3e5; color: #b8710a; }
-  .search-bar { margin: 14px 0; }
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(11,37,69,.55);
-    display: flex; align-items: flex-start; justify-content: center; padding: 30px 12px; z-index: 100; overflow-y: auto;
-  }
-  .modal { background: #fff; border-radius: var(--radius); max-width: 760px; width: 100%; padding: 26px; }
-  .kriteria-row { border: 1px solid #e5e9ee; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
-  .kriteria-row .kumpulan { font-size: .72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--gold); font-weight: 700; }
-  .kriteria-row .label { font-size: .88rem; font-weight: 600; margin: 2px 0 8px; }
-  .score-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .score-controls select { flex: 1 1 160px; }
-  .score-controls input { width: 90px; }
-  .contrib { font-size: .78rem; color: var(--muted); margin-left: auto; }
-  .totals-box {
-    background: var(--navy); color: #fff; border-radius: 8px; padding: 16px 20px;
-    display: flex; justify-content: space-between; align-items: center; margin-top: 16px; flex-wrap: wrap; gap: 10px;
-  }
-  .totals-box .big { font-size: 1.6rem; font-weight: 700; color: var(--gold); }
-  .section-title { font-weight: 700; color: var(--navy); margin: 22px 0 8px; font-size: .95rem; border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 3px; }
-  .close-x { position: absolute; top: 18px; right: 20px; cursor: pointer; font-size: 1.3rem; color: var(--muted); background:none; border:none; }
-  .modal { position: relative; }
-  .loading { text-align: center; padding: 30px; color: var(--muted); }
-</style>
-</head>
-<body>
-
-<header>
-  <h1>SISTEM MODERASI &amp; PEMARKAHAN AMALI</h1>
-  <p>MPU3481b — Kokurikulum Kor SISPA II &middot; IPG Kampus Darulaman</p>
-</header>
-
-<div class="wrap">
-
-  <!-- ==================== SKRIN PILIH PERANAN ==================== -->
-  <div id="screen-role">
-    <div class="roles">
-      <div class="role-btn" onclick="showScreen('screen-pelajar-login')">🎓<br>PELAJAR<br><span style="font-weight:400;font-size:.78rem;color:var(--muted)">Log masuk &amp; kemaskini biodata</span></div>
-      <div class="role-btn" onclick="showScreen('screen-pensyarah-login')">🧑‍🏫<br>PENSYARAH<br><span style="font-weight:400;font-size:.78rem;color:var(--muted)">Dashboard &amp; pemarkahan</span></div>
-    </div>
-  </div>
-
-  <!-- ==================== LOGIN PELAJAR ==================== -->
-  <div id="screen-pelajar-login" class="hidden">
-    <div class="card" style="max-width:420px;margin:0 auto;">
-      <h2>Log Masuk Pelajar</h2>
-      <label>No. Kad Pengenalan</label>
-      <input type="text" id="input-nokp" placeholder="Contoh: 040101101234">
-      <button class="primary" onclick="loginPelajar()">Log Masuk</button>
-      <button class="secondary" style="margin-top:10px;" onclick="showScreen('screen-role')">&larr; Kembali</button>
-      <div id="msg-pelajar-login" class="msg"></div>
-    </div>
-  </div>
-
-  <!-- ==================== BORANG BIODATA PELAJAR ==================== -->
-  <div id="screen-pelajar-biodata" class="hidden">
-    <div class="card" style="max-width:480px;margin:0 auto;">
-      <div class="topbar">
-        <h2 style="margin:0;">Kemaskini Biodata</h2>
-        <button class="secondary" onclick="logoutPelajar()">Log Keluar</button>
-      </div>
-      <img id="pelajar-photo-preview" class="photo-preview" src="https://placehold.co/130x130?text=Foto">
-      <label>Muat Naik / Tukar Gambar</label>
-      <input type="file" id="input-gambar" accept="image/*" onchange="previewGambar(event)">
-      <label>Nama</label>
-      <input type="text" id="field-nama" disabled>
-      <label>Kelas</label>
-      <input type="text" id="field-kelas" disabled>
-      <button class="primary" onclick="simpanBiodata()">Simpan Biodata</button>
-      <div id="msg-biodata" class="msg"></div>
-    </div>
-  </div>
-
-  <!-- ==================== LOGIN PENSYARAH ==================== -->
-  <div id="screen-pensyarah-login" class="hidden">
-    <div class="card" style="max-width:420px;margin:0 auto;">
-      <h2>Log Masuk Pensyarah</h2>
-      <label>Kata Laluan</label>
-      <input type="password" id="input-password" placeholder="Kata laluan">
-      <button class="primary" onclick="loginPensyarah()">Log Masuk</button>
-      <button class="secondary" style="margin-top:10px;" onclick="showScreen('screen-role')">&larr; Kembali</button>
-      <div id="msg-pensyarah-login" class="msg"></div>
-    </div>
-  </div>
-
-  <!-- ==================== DASHBOARD PENSYARAH ==================== -->
-  <div id="screen-dashboard" class="hidden">
-    <div class="card">
-      <div class="topbar">
-        <h2 style="margin:0;">Dashboard Pemarkahan Pelajar</h2>
-        <button class="secondary" onclick="logoutPensyarah()">Log Keluar</button>
-      </div>
-      <input type="text" class="search-bar" id="search-student" placeholder="Cari nama / kelas / no. KP..." oninput="renderDashboard()">
-      <div id="dashboard-loading" class="loading">Memuatkan senarai pelajar...</div>
-      <div id="grid-students" class="grid-students"></div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL PEMARKAHAN ==================== -->
-  <div id="modal-markah" class="modal-overlay hidden">
-    <div class="modal">
-      <button class="close-x" onclick="tutupModal()">&times;</button>
-      <div class="topbar">
-        <div>
-          <h2 id="modal-nama-pelajar" style="margin:0;">Nama Pelajar</h2>
-          <div style="color:var(--muted);font-size:.85rem;" id="modal-kelas-pelajar"></div>
-        </div>
-        <img id="modal-photo" class="photo-preview" style="width:70px;height:70px;margin:0;" src="https://placehold.co/70x70">
-      </div>
-
-      <div id="modal-loading" class="loading">Memuatkan rubrik...</div>
-      <div id="modal-content" class="hidden">
-        <div class="section-title">TUGASAN 1: UJIAN AMALI (70%)</div>
-        <div id="rubrik-tugasan1"></div>
-
-        <div class="section-title">TUGASAN 2: LAPORAN REFLEKTIF (30%)</div>
-        <div id="rubrik-tugasan2"></div>
-
-        <div class="totals-box">
-          <div>
-            <div style="font-size:.75rem;opacity:.8;">JUMLAH KESELURUHAN</div>
-            <div class="big"><span id="total-peratus">0</span>% &nbsp; <span id="total-gred"></span></div>
-          </div>
-          <button class="primary" style="margin:0;background:var(--gold);color:var(--navy);" onclick="simpanMarkah()">Simpan Markah</button>
-        </div>
-        <div id="msg-markah" class="msg"></div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<script>
-/* =====================================================
-   KONFIGURASI: GANTIKAN DENGAN URL WEB APP APPS SCRIPT ANDA
-   (Deploy > New deployment > Web app > Execute as: Me > Who has access: Anyone)
-===================================================== */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHr1cgPTAc-Nxi4I23ljvcOop1z0LiZu25sljQMZ69U6BwoAV5FkQjKP5MNueu1DHJ/exec';
-
-let currentStudent = null;   // pelajar yang sedang log masuk (portal pelajar)
-let gambarBase64Baru = null;
-let rubrikDef = null;        // cache definisi rubrik
-let dashboardData = [];      // senarai pelajar utk dashboard
-let modalNoKPAktif = null;
-
-function showScreen(id) {
-  document.querySelectorAll('#screen-role,#screen-pelajar-login,#screen-pelajar-biodata,#screen-pensyarah-login,#screen-dashboard')
-    .forEach(el => el.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
-
-function showMsg(id, text, type) {
-  const el = document.getElementById(id);
-  el.textContent = text;
-  el.className = 'msg ' + type;
-}
-
-async function apiPost(action, payload) {
-  const res = await fetch(GAS_URL, {
-    method: 'POST',
-    body: JSON.stringify(Object.assign({ action: action }, payload)),
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' } // elak preflight CORS pada GAS
-  });
-  return res.json();
-}
-
-async function apiGet(action, params) {
-  const qs = new URLSearchParams(Object.assign({ action: action }, params || {})).toString();
-  const res = await fetch(GAS_URL + '?' + qs);
-  return res.json();
-}
-
-/* ---------------- PELAJAR ---------------- */
-async function loginPelajar() {
-  const nokp = document.getElementById('input-nokp').value.trim();
-  if (!nokp) { showMsg('msg-pelajar-login', 'Sila masukkan No. Kad Pengenalan.', 'error'); return; }
-  const resp = await apiPost('loginPelajar', { nokp: nokp });
-  if (!resp.ok) { showMsg('msg-pelajar-login', resp.error, 'error'); return; }
-  currentStudent = resp.data;
-  document.getElementById('field-nama').value = currentStudent.nama || '';
-  document.getElementById('field-kelas').value = currentStudent.kelas || '';
-  document.getElementById('pelajar-photo-preview').src = currentStudent.gambar || 'https://placehold.co/130x130?text=Foto';
-  gambarBase64Baru = null;
-  showScreen('screen-pelajar-biodata');
-}
-
-function previewGambar(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    gambarBase64Baru = e.target.result;
-    document.getElementById('pelajar-photo-preview').src = gambarBase64Baru;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function simpanBiodata() {
-  const payload = { nokp: currentStudent.nokp, fields: {} };
-  if (gambarBase64Baru) payload.gambarBase64 = gambarBase64Baru;
-  const resp = await apiPost('updateBiodata', payload);
-  if (resp.ok) {
-    showMsg('msg-biodata', 'Biodata berjaya dikemaskini.', 'success');
-  } else {
-    showMsg('msg-biodata', resp.error, 'error');
-  }
-}
-
-function logoutPelajar() {
-  currentStudent = null;
-  gambarBase64Baru = null;
-  document.getElementById('input-nokp').value = '';
-  showScreen('screen-role');
-}
-
-/* ---------------- PENSYARAH ---------------- */
-async function loginPensyarah() {
-  const pw = document.getElementById('input-password').value;
-  const resp = await apiPost('loginPensyarah', { password: pw });
-  if (!resp.ok) { showMsg('msg-pensyarah-login', resp.error, 'error'); return; }
-  showScreen('screen-dashboard');
-  muatDashboard();
-}
-
-function logoutPensyarah() {
-  document.getElementById('input-password').value = '';
-  showScreen('screen-role');
-}
-
-async function muatDashboard() {
-  document.getElementById('dashboard-loading').classList.remove('hidden');
-  document.getElementById('grid-students').innerHTML = '';
-  const resp = await apiGet('getDashboard');
-  document.getElementById('dashboard-loading').classList.add('hidden');
-  if (!resp.ok) { alert('Ralat: ' + resp.error); return; }
-  dashboardData = resp.data.senarai;
-  renderDashboard();
-}
-
-function renderDashboard() {
-  const q = document.getElementById('search-student').value.toLowerCase();
-  const grid = document.getElementById('grid-students');
-  grid.innerHTML = '';
-  dashboardData
-    .filter(s => (s.nama || '').toLowerCase().includes(q) || (s.kelas || '').toLowerCase().includes(q) || (s.nokp || '').includes(q))
-    .forEach(function (s) {
-      const tile = document.createElement('div');
-      tile.className = 'student-tile';
-      tile.onclick = function () { bukaModalMarkah(s); };
-      tile.innerHTML = `
-        <img src="${s.gambar || 'https://placehold.co/76x76?text=%20'}">
-        <div class="nama">${s.nama || '(Tiada nama)'}</div>
-        <div class="kelas">${s.kelas || ''}</div>
-        <span class="badge ${s.siapDinilai ? 'done' : 'pending'}">${s.siapDinilai ? s.jumlahPeratus + '% &middot; ' + s.gred : 'Belum dinilai'}</span>
-      `;
-      grid.appendChild(tile);
-    });
-}
-
-/* ---------------- MODAL PEMARKAHAN ---------------- */
-async function bukaModalMarkah(student) {
-  modalNoKPAktif = student.nokp;
-  document.getElementById('modal-nama-pelajar').textContent = student.nama || '';
-  document.getElementById('modal-kelas-pelajar').textContent = student.kelas || '';
-  document.getElementById('modal-photo').src = student.gambar || 'https://placehold.co/70x70';
-  document.getElementById('modal-markah').classList.remove('hidden');
-  document.getElementById('modal-loading').classList.remove('hidden');
-  document.getElementById('modal-content').classList.add('hidden');
-  document.getElementById('msg-markah').className = 'msg';
-
-  if (!rubrikDef) {
-    const r = await apiGet('getRubrik');
-    if (!r.ok) { alert('Ralat memuat rubrik: ' + r.error); return; }
-    rubrikDef = r.data;
-  }
-  const existing = await apiGet('getStudentMarkah', { nokp: student.nokp });
-
-  renderRubrikForm('rubrik-tugasan1', rubrikDef.tugasan1.kriteria, existing.ok ? existing.data.markah : null);
-  renderRubrikForm('rubrik-tugasan2', rubrikDef.tugasan2.kriteria, existing.ok ? existing.data.markah : null);
-  kiraJumlah();
-
-  document.getElementById('modal-loading').classList.add('hidden');
-  document.getElementById('modal-content').classList.remove('hidden');
-}
-
-function renderRubrikForm(containerId, kriteriaList, existingMarkah) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
-  kriteriaList.forEach(function (k) {
-    const existingVal = existingMarkah && existingMarkah[k.kod] !== '' ? parseFloat(existingMarkah[k.kod]) : '';
-    const row = document.createElement('div');
-    row.className = 'kriteria-row';
-    row.innerHTML = `
-      <div class="kumpulan">${k.kumpulan} &middot; Wajaran ${k.wajaran}%</div>
-      <div class="label">${k.label}</div>
-      <div class="score-controls">
-        <select id="tahap-${k.kod}" onchange="pilihTahap('${k.kod}', ${k.skalaMax})">
-          <option value="">-- Pilih Tahap --</option>
-          ${k.bands.map(b => `<option value="${b.min}|${b.max}">${b.tahap} (${b.min}-${b.max})</option>`).join('')}
-        </select>
-        <input type="number" id="skor-${k.kod}" step="0.1" min="0" max="${k.skalaMax}"
-               value="${existingVal}" oninput="kiraJumlah()" placeholder="Skor">
-        <span class="contrib" id="contrib-${k.kod}">0%</span>
-      </div>
-    `;
-    container.appendChild(row);
-    // Set tahap dropdown mengikut skor sedia ada
-    if (existingVal !== '') {
-      const band = k.bands.find(b => existingVal >= b.min && existingVal <= b.max);
-      if (band) document.getElementById('tahap-' + k.kod).value = band.min + '|' + band.max;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Pemarkahan KOR SISPA IPG KDA 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --sispa-blue: #0A192F;
+      --sispa-navy: #172A45;
+      --sispa-orange: #FF6B00;
+      --sispa-orange-hover: #E05E00;
+      --sispa-border: #2C3E50;
     }
-  });
-}
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--sispa-blue);
+      color: #E6F1FF;
+    }
+    .heading-font { font-family: 'Lexend', sans-serif; }
+    .tactical-card {
+      background-color: var(--sispa-navy);
+      border: 2px solid var(--sispa-border);
+      box-shadow: 4px 4px 0px 0px var(--sispa-orange);
+    }
+    .tactical-input {
+      background-color: rgba(10, 25, 47, 0.7);
+      border: 1px solid var(--sispa-border);
+      color: #FFFFFF;
+    }
+    .tactical-input:focus {
+      border-color: var(--sispa-orange);
+      outline: none;
+    }
+    .btn-tactical {
+      background-color: var(--sispa-orange);
+      color: #0A192F;
+      font-weight: 700;
+    }
+    .btn-tactical:hover {
+      background-color: var(--sispa-orange-hover);
+    }
+    .loader {
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top: 3px solid var(--sispa-orange);
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-orange-500 selection:text-white">
 
-function pilihTahap(kod, skalaMax) {
-  const sel = document.getElementById('tahap-' + kod);
-  const [min, max] = sel.value.split('|').map(Number);
-  document.getElementById('skor-' + kod).value = max; // default ke had atas band
-  kiraJumlah();
-}
+  <header class="border-b-2 border-[#2C3E50] bg-[#0A192F] p-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-3 h-8 bg-[#FF6B00]"></div>
+        <div>
+          <h1 class="heading-font text-lg font-extrabold text-white">IPG KDA <span class="text-[#FF6B00]">SISPA 2026</span></h1>
+          <p class="text-[10px] text-gray-400 font-mono">PORTAL PENTAKSIRAN BERTERUSAN MPU3481b</p>
+        </div>
+      </div>
+      <div id="userInfo" class="hidden text-right text-xs bg-slate-800 px-3 py-1.5 border border-slate-700 rounded">
+        <span id="userBadgeName" class="font-bold text-orange-400">-</span>
+        <button onclick="logKeluar()" class="ml-3 text-red-400 hover:underline font-bold font-mono">KELUAR</button>
+      </div>
+    </div>
+  </header>
 
-function kiraJumlah() {
-  if (!rubrikDef) return;
-  let jumlahT1 = 0, jumlahT2 = 0;
-  rubrikDef.tugasan1.kriteria.forEach(function (k) {
-    const el = document.getElementById('skor-' + k.kod);
-    const val = el ? parseFloat(el.value) || 0 : 0;
-    const contrib = (val / k.skalaMax) * k.wajaran;
-    jumlahT1 += contrib;
-    const c = document.getElementById('contrib-' + k.kod);
-    if (c) c.textContent = contrib.toFixed(2) + '%';
-  });
-  rubrikDef.tugasan2.kriteria.forEach(function (k) {
-    const el = document.getElementById('skor-' + k.kod);
-    const val = el ? parseFloat(el.value) || 0 : 0;
-    const contrib = (val / k.skalaMax) * k.wajaran;
-    jumlahT2 += contrib;
-    const c = document.getElementById('contrib-' + k.kod);
-    if (c) c.textContent = contrib.toFixed(2) + '%';
-  });
-  const total = jumlahT1 + jumlahT2;
-  document.getElementById('total-peratus').textContent = total.toFixed(2);
-  document.getElementById('total-gred').textContent = kiraGredJS(total);
-}
+  <main class="flex-grow flex items-center justify-center p-4">
+    <div class="w-full max-w-7xl mx-auto">
+      
+      <section id="sectionLogin" class="max-w-md mx-auto tactical-card p-6 sm:p-8 rounded-none">
+        <div class="text-center mb-6">
+          <div class="inline-block px-3 py-1 bg-orange-600/10 border border-orange-500/30 text-orange-400 text-xs font-mono uppercase mb-2">
+            Pangkalan Kawalan Akses
+          </div>
+          <h2 class="heading-font text-lg font-bold text-white">Sistem Pemarkahan Amali</h2>
+        </div>
 
-function kiraGredJS(p) {
-  if (p >= 90) return 'A+';
-  if (p >= 80) return 'A';
-  if (p >= 75) return 'A-';
-  if (p >= 70) return 'B+';
-  if (p >= 65) return 'B';
-  if (p >= 60) return 'B-';
-  if (p >= 55) return 'C+';
-  if (p >= 50) return 'C';
-  if (p >= 45) return 'D';
-  if (p >= 40) return 'E';
-  return 'G';
-}
+        <div class="flex border-b border-slate-700 mb-6">
+          <button id="tabPelajar" onclick="tukarTabLogMasuk('pelajar')" class="w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono">
+            KADET/PELAJAR
+          </button>
+          <button id="tabPensyarah" onclick="tukarTabLogMasuk('pensyarah')" class="w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono">
+            PENSYARAH / PENILAI
+          </button>
+        </div>
 
-async function simpanMarkah() {
-  const skor = {};
-  rubrikDef.tugasan1.kriteria.concat(rubrikDef.tugasan2.kriteria).forEach(function (k) {
-    const el = document.getElementById('skor-' + k.kod);
-    skor[k.kod] = el ? (parseFloat(el.value) || 0) : 0;
-  });
-  const student = dashboardData.find(s => s.nokp === modalNoKPAktif);
-  const resp = await apiPost('saveMarkah', {
-    nokp: modalNoKPAktif,
-    nama: student ? student.nama : '',
-    kelas: student ? student.kelas : '',
-    skor: skor,
-    pensyarah: 'Pensyarah'
-  });
-  if (resp.ok) {
-    showMsg('msg-markah', 'Markah berjaya disimpan. Jumlah: ' + resp.data.jumlahPeratus.toFixed(2) + '% (' + resp.data.gred + ')', 'success');
-    muatDashboard();
-  } else {
-    showMsg('msg-markah', resp.error, 'error');
-  }
-}
+        <div id="formLoginPelajar" class="space-y-4">
+          <div>
+            <label class="block text-xs font-mono text-gray-400 mb-1">No. Kad Pengenalan (Isi Angka Sahaja)</label>
+            <input type="text" id="inputKP" placeholder="Contoh: 030415101234" class="w-full p-3 tactical-input font-mono text-sm tracking-widest">
+          </div>
+          <button onclick="prosesMasukPelajar()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
+            <span>Sahkan Identiti Kadet</span>
+            <div id="spinPelajar" class="loader hidden"></div>
+          </button>
+        </div>
 
-function tutupModal() {
-  document.getElementById('modal-markah').classList.add('hidden');
-  modalNoKPAktif = null;
-}
-</script>
+        <div id="formLoginPensyarah" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-mono text-gray-400 mb-1">Kata Laluan Pentadbiran</label>
+            <input type="password" id="inputKatalaluan" placeholder="••••••••" class="w-full p-3 tactical-input text-sm font-mono">
+          </div>
+          <button onclick="prosesMasukPensyarah()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
+            <span>Masuk Portal Penilai</span>
+            <div id="spinPensyarah" class="loader hidden"></div>
+          </button>
+        </div>
+        
+        <div id="loginMsg" class="mt-4 p-3 bg-red-950/40 border border-red-900/60 text-center text-xs text-red-400 font-mono hidden rounded"></div>
+      </section>
+
+      <section id="sectionPelajar" class="hidden max-w-2xl mx-auto tactical-card p-6 rounded-none">
+        <div class="border-b border-slate-700 pb-4 mb-6">
+          <span class="text-xs font-mono bg-blue-900/50 text-blue-400 border border-blue-800 px-2 py-0.5 rounded">PROFIL SQUAD KADET</span>
+          <h2 id="pelajarNamaHeader" class="heading-font text-xl font-bold text-white mt-2">-</h2>
+          <p id="pelajarKPHeader" class="text-xs text-gray-400 font-mono mt-0.5">-</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="text-center md:col-span-1">
+            <div class="w-full aspect-[3/4] bg-slate-900 border border-slate-700 flex flex-col items-center justify-center relative overflow-hidden">
+              <img id="previewGambar" src="" class="w-full h-full object-cover hidden">
+              <div id="placeholderGambar" class="text-[10px] text-slate-500 font-mono">TIADA DATA FOTO</div>
+            </div>
+          </div>
+          <div class="md:col-span-2 space-y-4">
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Nombor Badan Kor SISPA</label>
+              <input type="text" id="studentNoBadan" placeholder="SISPA/2026/045" class="w-full p-3 tactical-input font-mono text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Foto Unifor Terkini (JPG/PNG)</label>
+              <input type="file" id="studentFile" accept="image/*" onchange="bacaFailGambar(this)" class="w-full text-xs text-slate-400">
+            </div>
+            <button onclick="hantarKemaskiniPelajar()" class="w-full py-3 btn-tactical text-xs uppercase flex justify-center items-center space-x-2">
+              <span>Kemaskini Fail Profil</span>
+              <div id="spinUpdatePelajar" class="loader hidden"></div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="sectionDashboardPensyarah" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#172A45] p-4 border border-[#2C3E50]">
+          <div>
+            <h2 class="heading-font text-base font-bold text-white">Pentaksiran Berterusan Kor SISPA II</h2>
+          </div>
+          <input type="text" id="carianPelajar" oninput="tapisPelajar()" placeholder="Cari nama atau No. KP..." class="w-full sm:w-72 p-2 tactical-input text-xs font-mono mt-2 sm:mt-0">
+        </div>
+        <div class="bg-slate-900 border border-slate-800 overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950 font-mono text-gray-400 uppercase">
+                <th class="p-4 w-16">Foto</th>
+                <th class="p-4">Nama Kadet</th>
+                <th class="p-4">No. Kad Pengenalan</th>
+                <th class="p-4">No. Badan</th>
+                <th class="p-4 text-center">Skor Akhir (100%)</th>
+                <th class="p-4 text-right">Tindakan</th>
+              </tr>
+            </thead>
+            <tbody id="senaraiPelajarBody" class="divide-y divide-slate-800"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="sectionBorangPemarkahan" class="hidden space-y-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-700 pb-4 gap-4">
+          <div>
+            <button onclick="kembaliKeDashboard()" class="text-xs text-orange-400 hover:underline font-mono">← KEMBALI PORTAL</button>
+            <h2 id="nilaiNama" class="heading-font text-lg font-bold text-white mt-1">-</h2>
+            <p id="nilaiDetail" class="text-xs text-gray-400 font-mono">-</p>
+          </div>
+          <div class="bg-slate-950 p-3 border border-slate-800 flex items-center space-x-4">
+            <div>
+              <div class="text-[10px] font-mono text-gray-400">Est. Skor</div>
+              <div id="skorBesar" class="heading-font text-2xl font-extrabold text-[#FF6B00]">0.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono text-gray-400">Gred Unjuran</div>
+              <div id="gredBesar" class="text-xs font-bold font-mono text-slate-400">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-4">
+            <div class="tactical-card p-5 space-y-4">
+              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 1: UJIAN AMALI (70%) <span id="subtotalAmali" class="float-right text-white">0.0/70%</span></h3>
+              
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">1. Pengurusan Perkhemahan - HP3 (Wajaran 10%)</span>
+                  <input type="number" id="m_a1_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">2. Pengurusan Perkhemahan - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a1_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">3. Amali Tali & Ikatan - HP3 (Wajaran 15%)</span>
+                  <input type="number" id="m_a2_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">4. Pengurusan Bencana - HP3 (Wajaran 10%)</span>
+                  <input type="number" id="m_a3_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">5. Navigasi Darat - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a4_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">6. Navigasi Darat - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a4_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">7. Amali Kebudayaan - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a5_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">8. Amali Kebudayaan - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a5_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">9. Keterlibatan Komuniti - HP3 (Wajaran 5%)</span>
+                  <input type="number" id="m_a6_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">10. Keterlibatan Komuniti - HP8 (Wajaran 5%)</span>
+                  <input type="number" id="m_a6_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+              </div>
+            </div>
+
+            <div class="tactical-card p-5 space-y-4">
+              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 2: LAPORAN REFLEKTIF (30%) <span id="subtotalReflektif" class="float-right text-white">0.0/30%</span></h3>
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">11. Laporan Kognitif - HP2 (Wajaran 5%)</span>
+                  <input type="number" id="m_ref_hp2" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">12. Laporan Kognitif - KKG1 (Wajaran 5%)</span>
+                  <input type="number" id="m_ref_kkg1" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">13. Kemahiran Komunikasi - HP4 (Wajaran 10%)</span>
+                  <input type="number" id="m_ref_hp4" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
+                  <span class="w-3/4">14. Tingkah Laku Positif - KMI3 (Wajaran 10%)</span>
+                  <input type="number" id="m_ref_kmi3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-1">
+            <div class="tactical-card p-4 space-y-4">
+              <label class="block text-xs font-mono text-gray-400">Ulasan Pentaksir Profesional</label>
+              <textarea id="ulasanPentaksir" rows="6" class="w-full p-2 text-xs tactical-input" placeholder="Tulis ulasan portfolio..."></textarea>
+              <button onclick="hantarPemarkahan()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
+                <span>Kunci Markah Mentah</span>
+                <div id="spinSimpanMarkah" class="loader hidden"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    let databasePelajar = [], pelajarAktif = null;
+    let base64GambarData = null, base64GambarMime = "", base64GambarNama = "";
+
+    function tukarTabLogMasuk(tab) {
+      document.getElementById('loginMsg').classList.add('hidden');
+      if (tab === 'pelajar') {
+        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
+        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
+        document.getElementById('formLoginPelajar').classList.remove('hidden');
+        document.getElementById('formLoginPensyarah').classList.add('hidden');
+      } else {
+        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
+        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
+        document.getElementById('formLoginPensyarah').classList.remove('hidden');
+        document.getElementById('formLoginPelajar').classList.add('hidden');
+      }
+    }
+
+    function prosesMasukPelajar() {
+      const kp = document.getElementById('inputKP').value.trim();
+      const msg = document.getElementById('loginMsg');
+      const spin = document.getElementById('spinPelajar');
+      
+      if(!kp) { msg.textContent = 'Sila masukkan IC Kadet.'; msg.classList.remove('hidden'); return; }
+      msg.classList.add('hidden'); spin.classList.remove('hidden');
+
+      google.script.run
+        .withSuccessHandler(function(respons) {
+          spin.classList.add('hidden');
+          if (respons.status === 'SUCCESS') { pelajarAktif = respons.data; bukaPortalPelajar(); } 
+          else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
+        })
+        .withFailureHandler(function(err) {
+          spin.classList.add('hidden');
+          msg.textContent = "Ralat: " + (err ? err.message : 'Kebenaran disekat.');
+          msg.classList.remove('hidden');
+        })
+        .logMasukPelajar(kp);
+    }
+
+    function prosesMasukPensyarah() {
+      const pass = document.getElementById('inputKatalaluan').value;
+      const msg = document.getElementById('loginMsg');
+      const spin = document.getElementById('spinPensyarah');
+      if (pass === 'sispa2026') {
+        msg.classList.add('hidden'); spin.classList.remove('hidden');
+        google.script.run
+          .withSuccessHandler(function(respons) {
+            spin.classList.add('hidden');
+            if(respons.status === 'SUCCESS') { databasePelajar = respons.senarai; bukaDashboardPensyarah(); } 
+            else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
+          })
+          .withFailureHandler(function(err) { spin.classList.add('hidden'); msg.textContent = err.message; msg.classList.remove('hidden'); })
+          .dapatkanSenaraiPelajar();
+      } else { msg.textContent = 'Kata Laluan Pentadbiran Salah!'; msg.classList.remove('hidden'); }
+    }
+
+    function bukaPortalPelajar() {
+      document.getElementById('sectionLogin').classList.add('hidden');
+      document.getElementById('sectionPelajar').classList.remove('hidden');
+      document.getElementById('userInfo').classList.remove('hidden');
+      document.getElementById('userBadgeName').textContent = pelajarAktif.nama;
+      document.getElementById('pelajarNamaHeader').textContent = pelajarAktif.nama;
+      document.getElementById('pelajarKPHeader').textContent = "IC: " + pelajarAktif.noKP;
+      document.getElementById('studentNoBadan').value = pelajarAktif.noBadan;
+      if(pelajarAktif.gambarUrl) pamerGambarPreview(pelajarAktif.gambarUrl);
+    }
+
+    function bacaFailGambar(input) {
+      if (input.files && input.files[0]) {
+        const fail = input.files[0];
+        base64GambarNama = fail.name; base64GambarMime = fail.type;
+        const pembaca = new FileReader();
+        pembaca.onload = function(e) {
+          base64GambarData = e.target.result;
+          document.getElementById('previewGambar').src = base64GambarData;
+          document.getElementById('previewGambar').classList.remove('hidden');
+          document.getElementById('placeholderGambar').classList.add('hidden');
+        }
+        pembaca.readAsDataURL(fail);
+      }
+    }
+
+    function pamerGambarPreview(url) {
+      const img = document.getElementById('previewGambar');
+      let formattedUrl = url;
+      if(url.includes('drive.google.com/file/d/')) {
+        formattedUrl = 'https://docs.google.com/uc?export=view&id=' + url.split('/d/')[1].split('/')[0];
+      }
+      img.src = formattedUrl; img.classList.remove('hidden');
+      document.getElementById('placeholderGambar').classList.add('hidden');
+    }
+
+    function hantarKemaskiniPelajar() {
+      const noBadan = document.getElementById('studentNoBadan').value.trim();
+      const spin = document.getElementById('spinUpdatePelajar');
+      if(!noBadan) { alert("Isi nombor badan."); return; }
+      spin.classList.remove('hidden');
+      google.script.run
+        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); })
+        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
+        .kemaskiniProfilPelajar({ row: pelajarAktif.row, noBadan: noBadan, fileData: base64GambarData, fileName: base64GambarNama, fileType: base64GambarMime });
+    }
+
+    function bukaDashboardPensyarah() {
+      document.getElementById('sectionLogin').classList.add('hidden');
+      document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
+      document.getElementById('userInfo').classList.remove('hidden');
+      document.getElementById('userBadgeName').textContent = "PENSYARAH";
+      binaJadualPelajar(databasePelajar);
+    }
+
+    function binaJadualPelajar(senarai) {
+      const tbody = document.getElementById('senaraiPelajarBody');
+      tbody.innerHTML = '';
+      senarai.forEach(function(p, indeks) {
+        let txtM = p.markahAkhir !== null ? `<span class="font-bold text-orange-400 font-mono">${p.markahAkhir.toFixed(1)}%</span>` : `<span class="text-gray-600 font-mono">-</span>`;
+        let tr = document.createElement('tr');
+        tr.className = "border-b border-slate-800 hover:bg-slate-800/30";
+        tr.innerHTML = `<td class="p-4">...</td><td class="p-4 font-bold text-white">${p.nama}</td><td class="p-4 font-mono text-gray-400">${p.noKP}</td><td class="p-4 font-mono text-slate-300">${p.noBadan}</td><td class="p-4 text-center">${txtM}</td><td class="p-4 text-right"><button onclick="bukaBorangPenilaian(${indeks})" class="px-3 py-1 bg-slate-800 border border-slate-700 text-orange-400 hover:bg-orange-500 hover:text-black font-bold uppercase">NILAI</button></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function tapisPelajar() {
+      const c = document.getElementById('carianPelajar').value.toLowerCase();
+      binaJadualPelajar(databasePelajar.filter(p => p.nama.toLowerCase().includes(c) || p.noKP.toLowerCase().includes(c)));
+    }
+
+    function bukaBorangPenilaian(indeks) {
+      pelajarAktif = databasePelajar[indeks];
+      document.getElementById('sectionDashboardPensyarah').classList.add('hidden');
+      document.getElementById('sectionBorangPemarkahan').classList.remove('hidden');
+      document.getElementById('nilaiNama').textContent = pelajarAktif.nama;
+      document.getElementById('nilaiDetail').textContent = `IC: ${pelajarAktif.noKP}`;
+      kiraSkorMasaNyata();
+    }
+
+    function kembaliKeDashboard() {
+      document.getElementById('sectionBorangPemarkahan').classList.add('hidden');
+      document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
+    }
+
+    function kiraSkorMasaNyata() {
+      const gv = id => { let v = parseFloat(document.getElementById(id).value) || 0; if(v>100)v=100; if(v<0)v=0; return v; };
+      const subA = (gv('m_a1_hp3')*0.1)+(gv('m_a1_hp8')*0.05)+(gv('m_a2_hp3')*0.15)+(gv('m_a3_hp3')*0.1)+(gv('m_a4_hp3')*0.05)+(gv('m_a4_hp8')*0.05)+(gv('m_a5_hp3')*0.05)+(gv('m_a5_hp8')*0.05)+(gv('m_a6_hp3')*0.05)+(gv('m_a6_hp8')*0.05);
+      const subB = (gv('m_ref_hp2')*0.05)+(gv('m_ref_kkg1')*0.05)+(gv('m_ref_hp4')*0.1)+(gv('m_ref_kmi3')*0.1);
+      const total = subA + subB;
+
+      document.getElementById('subtotalAmali').textContent = subA.toFixed(1) + "/70%";
+      document.getElementById('subtotalReflektif').textContent = subB.toFixed(1) + "/30%";
+      document.getElementById('skorBesar').textContent = total.toFixed(1) + "%";
+      document.getElementById('gredBesar').textContent = total >= 80 ? "CEMERLANG" : total >= 60 ? "KEPUJIAN" : total >= 40 ? "LULUS" : "GAGAL";
+    }
+
+    function hantarPemarkahan() {
+      const spin = document.getElementById('spinSimpanMarkah'); spin.classList.remove('hidden');
+      google.script.run
+        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); kembaliKeDashboard(); })
+        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
+        .simpanPemarkahan({
+          noKP: pelajarAktif.noKP, nama: pelajarAktif.nama, noBadan: pelajarAktif.noBadan,
+          rawA1_hp3: parseFloat(document.getElementById('m_a1_hp3').value)||0,
+          rawA1_hp8: parseFloat(document.getElementById('m_a1_hp8').value)||0,
+          rawA2_hp3: parseFloat(document.getElementById('m_a2_hp3').value)||0,
+          rawA3_hp3: parseFloat(document.getElementById('m_a3_hp3').value)||0,
+          rawA4_hp3: parseFloat(document.getElementById('m_a4_hp3').value)||0,
+          rawA4_hp8: parseFloat(document.getElementById('m_a4_hp8').value)||0,
+          rawA5_hp3: parseFloat(document.getElementById('m_a5_hp3').value)||0,
+          rawA5_hp8: parseFloat(document.getElementById('m_a5_hp8').value)||0,
+          rawA6_hp3: parseFloat(document.getElementById('m_a6_hp3').value)||0,
+          rawA6_hp8: parseFloat(document.getElementById('m_a6_hp8').value)||0,
+          rawRef_hp2: parseFloat(document.getElementById('m_ref_hp2').value)||0,
+          rawRef_kkg1: parseFloat(document.getElementById('m_ref_kkg1').value)||0,
+          rawRef_hp4: parseFloat(document.getElementById('m_ref_hp4').value)||0,
+          rawRef_kmi3: parseFloat(document.getElementById('m_ref_kmi3').value)||0,
+          ulasan: document.getElementById('ulasanPentaksir').value
+        });
+    }
+
+    function logKeluar() { location.reload(); }
+  </script>
 </body>
 </html>
