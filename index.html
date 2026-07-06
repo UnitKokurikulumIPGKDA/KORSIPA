@@ -9,7 +9,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -171,7 +171,7 @@
           
           <div class="relative group mb-4">
             <div class="w-36 h-44 rounded-xl border-2 border-dashed border-slate-700 p-1 bg-slate-950 flex items-center justify-center relative overflow-hidden">
-              <img id="student-photo" src="" class="w-full h-full object-cover object-center rounded-lg hidden shadow-lg max-w-full max-h-full block">
+              <img id="student-photo" src="" class="w-full h-full object-cover object-center rounded-lg hidden shadow-lg">
               <div id="student-photo-placeholder" class="text-slate-600 flex flex-col items-center justify-center gap-2">
                 <i class="fa-solid fa-user-tie text-4xl"></i>
                 <span class="text-[9px] uppercase font-mono tracking-wider text-slate-500">Foto Pasport</span>
@@ -242,7 +242,6 @@
     </section>
 
     <section id="page-lecturer" class="hidden transition-all duration-500 flex flex-col gap-8">
-      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4">
           <div class="p-3 bg-blue-500/10 text-apm-accent rounded-xl text-2xl"><i class="fa-solid fa-users"></i></div>
@@ -277,7 +276,6 @@
       </div>
 
       <div id="lecturer-workspace-panel" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
         <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col gap-4 max-h-[800px] overflow-hidden">
           <h3 class="font-bold text-md text-white px-2 flex items-center gap-2">
             <i class="fa-solid fa-address-book text-apm-orange"></i> Senarai Rekod Pelajar
@@ -459,8 +457,7 @@
                 <th class="p-3 font-semibold text-center">Skor Akhir (100%)</th>
               </tr>
             </thead>
-            <tbody id="summary-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-              </tbody>
+            <tbody id="summary-table-body" class="divide-y divide-slate-800/60 text-slate-300"></tbody>
           </table>
         </div>
       </div>
@@ -483,21 +480,26 @@
       fetchStudentsDataFromBackend();
     }
 
-    // Penukur Pintar Kalis Sekatan Kuki Pelayar
+    // Fungsi Penukur Pautan Drive Terselamat Bebas Ralat Sekatan Kuki Pelayar
     function getCleanDriveUrl(url) {
       if (!url) return '';
-      if (url.startsWith('data:image') || url.includes('googleusercontent.com/profile/picture')) {
-        return url;
+      var s = String(url).trim();
+      if (s.indexOf('data:image') === 0 || s.indexOf('googleusercontent.com') !== -1) {
+        return s;
       }
-      if (url.includes('drive.google.com')) {
-        const match = url.match(/\/d\/([^\/]+)|\bid=([^&]+)/);
-        if (match) {
-          const fileId = match[1] || match[2];
-          // Menggunakan sistem Google Direct Content Stream
-          return `https://drive.google.com/uc?id=${fileId}`;
+      if (s.indexOf('drive.google.com') !== -1) {
+        var dMatch = s.match(/\/d\/([^\/]+)/);
+        var idMatch = s.match(/[?&]id=([^&]+)/);
+        var fileId = '';
+        
+        if (dMatch && dMatch[1]) { fileId = dMatch[1]; }
+        else if (idMatch && idMatch[1]) { fileId = idMatch[1]; }
+        
+        if (fileId) {
+          return 'https://docs.google.com/uc?export=view&id=' + fileId;
         }
       }
-      return url;
+      return s;
     }
 
     function showLoading(show) {
@@ -569,7 +571,6 @@
       }
     }
 
-    // Mengawal Menu Pertukaran Tab Dashboard Pensyarah
     function switchLecturerTab(tab) {
       const wsBtn = document.getElementById('tab-btn-workspace');
       const smBtn = document.getElementById('tab-btn-summary');
@@ -614,7 +615,6 @@
       }
     }
 
-    // Aliran Pengesahan Keselamatan Kemasukan Pensyarah
     async function processLoginPensyarah() {
       const idPenilai = document.getElementById('login-pensyarah-id').value.trim();
       const kodLaluan = document.getElementById('login-pensyarah-kod').value.trim();
@@ -740,7 +740,6 @@
       document.getElementById('stat-completed').innerText = `${evaluatedCount} / ${allStudentsData.length}`;
     }
 
-    // Membina Senarai Rekod Pelajar Bersama Markah Purata Terkini Pasukan Di Bar Sisi
     function buildStudentList() {
       const container = document.getElementById('student-list-container');
       container.innerHTML = '';
@@ -765,7 +764,6 @@
       });
     }
 
-    // Membina Jadual Rumusan Keputusan Keseluruhan Mengikut Kumpulan Unit Induk
     function renderSummaryTable() {
       const filter = document.getElementById('summary-group-filter').value;
       const tbody = document.getElementById('summary-table-body');
@@ -866,7 +864,6 @@
       document.getElementById('input-RK_KMI3').value = refScores.RK_KMI3 || 0;
     }
 
-    // Melakukan Had Had Kawalan Sempadan Input Markah Secara Automatik
     function validateInputRange(input, maxVal) {
       let val = parseFloat(input.value);
       if (val < 0 || isNaN(val)) input.value = 0;
