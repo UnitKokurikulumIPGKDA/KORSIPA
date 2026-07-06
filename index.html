@@ -9,7 +9,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -128,7 +128,7 @@
             </div>
           </div>
           <button class="w-full bg-gradient-to-r from-apm-blue to-blue-700 hover:from-apm-orange hover:to-orange-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-500 transform hover:-translate-y-0.5" onclick="processLoginPelajar()">
-            Masuk Portal Pelajar <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+            Sahkan Identiti Kadet <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
           </button>
         </div>
 
@@ -464,7 +464,6 @@
     }
 
     async function callAPI(action, data = {}) {
-      支配 = true;
       showLoading(true);
       try {
         const response = await fetch(API_URL, {
@@ -474,13 +473,13 @@
           body: JSON.stringify({ action, ...data })
         });
         const result = await response.json();
-        showLoading(false);
         return result;
       } catch (err) {
-        showLoading(false);
         console.error(err);
         showToast('Ralat Hubungan', 'Gagal memproses data. Sila pastikan pautan API aktif.', 'error');
         return { success: false, message: err.toString() };
+      } finally {
+        showLoading(false);
       }
     }
 
@@ -598,7 +597,6 @@
         placeholderEl.classList.add('hidden');
       } else {
         photoEl.classList.add('hidden');
-        placeholderEl.cursor = 'pointer';
         placeholderEl.classList.remove('hidden');
       }
 
@@ -813,6 +811,7 @@
       document.getElementById('input-RK_KMI3').value = refScores.RK_KMI3 || 0;
     }
 
+    // Kawalan input markah
     function validateInputRange(input, maxVal) {
       let val = parseFloat(input.value);
       if (val < 0 || isNaN(val)) input.value = 0;
