@@ -134,15 +134,24 @@
 
         <div id="login-pensyarah-form" class="space-y-4 hidden">
           <div class="p-4 bg-orange-500/10 border border-apm-orange/20 rounded-xl text-xs text-apm-orange leading-relaxed">
-            <i class="fa-solid fa-circle-info mr-1.5"></i> Sebagai keselamatan, pensyarah boleh mengakses terus senarai markah semua pelajar. Sila masukkan Nama anda untuk menandatangani rekod penilaian.
+            <i class="fa-solid fa-circle-info mr-1.5"></i> Akses ini terhad untuk Pensyarah Pentaksir sahaja. Sila masukkan nombor ID kakitangan dan kod laluan pengesahan keselamatan anda.
           </div>
           <div>
-            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">Nama Pensyarah / Penilai</label>
+            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">No. ID / No. KP Penilai (Angka Sahaja)</label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                <i class="fa-solid fa-user-shield"></i>
+                <i class="fa-solid fa-hashtag"></i>
               </span>
-              <input type="text" id="login-pensyarah-nama" placeholder="Contoh: Mejar (PA) Musaidi" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
+              <input type="text" id="login-pensyarah-id" placeholder="Masukkan nombor ID sahaja" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">Kod Laluan Pentaksir</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-key"></i>
+              </span>
+              <input type="password" id="login-pensyarah-kod" placeholder="Masukkan kod laluan keselamatan" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
             </div>
           </div>
           <button class="w-full bg-gradient-to-r from-apm-orange to-amber-600 hover:from-blue-600 hover:to-apm-blue text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-500 transform hover:-translate-y-0.5" onclick="processLoginPensyarah()">
@@ -427,15 +436,13 @@
       fetchStudentsDataFromBackend();
     }
 
-    // Fungsi Khas: Menukar pautan paparan Google Drive kepada pautan strim imej muat turun terus
+    // Mengubah pautan paparan Drive kepada pautan strim imej muat turun terus
     function getCleanDriveUrl(url) {
       if (!url) return '';
-      // Jika sudah dalam bentuk base64 (preview awal) atau format dokumen uc, kekalkan
       if (url.startsWith('data:image') || url.includes('docs.google.com/uc')) {
         return url;
       }
       if (url.includes('drive.google.com')) {
-        // Regex untuk mengekstrak ID fail unik daripada pautan Google Drive
         const match = url.match(/\/d\/([^\/]+)|\bid=([^&]+)/);
         if (match) {
           const fileId = match[1] || match[2];
@@ -505,7 +512,7 @@
         pelajarBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-semibold bg-apm-orange text-white";
         pensyarahBtn.className = "flex-1 py-2.5 rounded-lg text-sm text-slate-400";
         pelajarForm.classList.remove('hidden');
-        pensyarForm.classList.add('hidden');
+        pensyarahForm.classList.add('hidden');
       } else {
         pensyarahBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-semibold bg-apm-orange text-white";
         pelajarBtn.className = "flex-1 py-2.5 rounded-lg text-sm text-slate-400";
@@ -538,19 +545,31 @@
       }
     }
 
+    // Fungsi Log Masuk Pensyarah Tegas Keselamatan
     async function processLoginPensyarah() {
-      const namaPenilai = document.getElementById('login-pensyarah-nama').value.trim();
-      if (!namaPenilai) {
-        showToast('Perhatian', 'Sila isi Nama Pensyarah Penilai.', 'error');
+      const idPenilai = document.getElementById('login-pensyarah-id').value.trim();
+      const kodLaluan = document.getElementById('login-pensyarah-kod').value.trim();
+
+      // Sekatan 1: Sumpah ID mesti berformat angka/nombor sahaja
+      if (!idPenilai || isNaN(idPenilai)) {
+        showToast('Perhatian', 'Sila isi Nombor ID / No KP Penilai (Angka Sahaja).', 'error');
         return;
       }
-      currentLecturerName = namaPenilai;
+
+      // Sekatan 2: Menyemak padanan kata laluan rahsia tegar
+      if (kodLaluan !== 'SISPA2026B') {
+        showToast('Ralat Akses', 'Kod Laluan Pensyarah yang dimasukkan adalah salah!', 'error');
+        return;
+      }
+
+      // Gunakan ID nombor sebagai rekod penanda tangan penilai pada Google Sheets
+      currentLecturerName = idPenilai;
 
       const response = await callAPI('getLecturerData');
       if (response.success) {
         allStudentsData = response.students;
         showLecturerDashboard();
-        showToast('Sistem Bersedia', `Selamat datang, ${namaPenilai}!`, 'success');
+        showToast('Sistem Bersedia', 'Pengesahan identiti keselamatan berjaya!', 'success');
       } else {
         showToast('Gagal', 'Tidak dapat memuatkan data dari Google Sheets.', 'error');
       }
@@ -580,7 +599,6 @@
       const photoEl = document.getElementById('student-photo');
       const placeholderEl = document.getElementById('student-photo-placeholder');
       
-      // Menggunakan penukur URL Drive pintar untuk paparan pelajar
       if (student.biodata.gambarUrl) {
         photoEl.src = getCleanDriveUrl(student.biodata.gambarUrl);
         photoEl.classList.remove('hidden');
@@ -702,7 +720,6 @@
       const photoEl = document.getElementById('grading-student-photo');
       const placeholderEl = document.getElementById('grading-student-photo-placeholder');
       
-      // Menggunakan penukur URL Drive pintar untuk paparan pensyarah
       if (student.biodata.gambarUrl) {
         photoEl.src = getCleanDriveUrl(student.biodata.gambarUrl); 
         photoEl.classList.remove('hidden'); 
