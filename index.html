@@ -1,467 +1,861 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="ms" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistem Pemarkahan KOR SISPA IPG KDA 2026</title>
+  <title>Sistem Pentaksiran Kor SISPA II | IPG KDA</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
-  <style>
-    :root {
-      --sispa-blue: #0A192F;
-      --sispa-navy: #172A45;
-      --sispa-orange: #FF6B00;
-      --sispa-orange-hover: #E05E00;
-      --sispa-border: #2C3E50;
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            apm: {
+              navy: '#0f172a',
+              blue: '#1d4ed8',
+              orange: '#f97316',
+              accent: '#38bdf8',
+              dark: '#1e293b',
+              border: '#334155',
+            }
+          }
+        }
+      }
     }
+  </script>
+
+  <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--sispa-blue);
-      color: #E6F1FF;
     }
-    .heading-font { font-family: 'Lexend', sans-serif; }
-    .tactical-card {
-      background-color: var(--sispa-navy);
-      border: 2px solid var(--sispa-border);
-      box-shadow: 4px 4px 0px 0px var(--sispa-orange);
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    .tactical-input {
-      background-color: rgba(10, 25, 47, 0.7);
-      border: 1px solid var(--sispa-border);
-      color: #FFFFFF;
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(30, 41, 59, 0.5);
     }
-    .tactical-input:focus {
-      border-color: var(--sispa-orange);
-      outline: none;
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 3px;
     }
-    .btn-tactical {
-      background-color: var(--sispa-orange);
-      color: #0A192F;
-      font-weight: 700;
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #f97316;
     }
-    .btn-tactical:hover {
-      background-color: var(--sispa-orange-hover);
+    .card-glow:hover {
+      box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.15);
     }
-    .loader {
-      border: 3px solid rgba(255,255,255,0.1);
-      border-radius: 50%;
-      border-top: 3px solid var(--sispa-orange);
-      width: 20px;
-      height: 20px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-orange-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col custom-scrollbar selection:bg-apm-orange selection:text-white">
 
-  <header class="border-b-2 border-[#2C3E50] bg-[#0A192F] p-4 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <div class="w-3 h-8 bg-[#FF6B00]"></div>
+  <div id="global-loader" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex flex-col items-center justify-center hidden">
+    <div class="relative w-20 h-20 mb-6">
+      <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-t-apm-orange animate-spin"></div>
+    </div>
+    <p class="text-sm font-mono tracking-widest text-apm-orange uppercase animate-pulse">Menghubungi Pangkalan Data APM...</p>
+  </div>
+
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-md w-full pointer-events-none"></div>
+
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-apm-orange to-amber-500 p-2.5 flex items-center justify-center shadow-lg shadow-apm-orange/20">
+          <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 0121 12z" />
+          </svg>
+        </div>
         <div>
-          <h1 class="heading-font text-lg font-extrabold text-white">IPG KDA <span class="text-[#FF6B00]">SISPA 2026</span></h1>
-          <p class="text-[10px] text-gray-400 font-mono">PORTAL PENTAKSIRAN BERTERUSAN MPU3481b</p>
+          <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-apm-orange bg-clip-text text-transparent">KOR SISPA II</h1>
+          <p class="text-xs text-slate-400 font-mono">MPU3481b • IPG KAMPUS DARULAMAN</p>
         </div>
       </div>
-      <div id="userInfo" class="hidden text-right text-xs bg-slate-800 px-3 py-1.5 border border-slate-700 rounded">
-        <span id="userBadgeName" class="font-bold text-orange-400">-</span>
-        <button onclick="logKeluar()" class="ml-3 text-red-400 hover:underline font-bold font-mono">KELUAR</button>
+      
+      <div class="flex items-center gap-3">
+        <span id="mode-badge" class="px-3 2xl:px-4 py-1 text-xs font-mono font-bold uppercase rounded-full bg-green-500/10 text-green-400 border border-green-500/30">
+          Sambungan API Live
+        </span>
+        <button id="logout-btn" class="hidden px-4 py-2 text-sm font-semibold rounded-lg bg-slate-800 hover:bg-red-500 hover:text-white transition-all duration-300" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>Keluar Portal
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="flex-grow flex items-center justify-center p-4">
-    <div class="w-full max-w-7xl mx-auto">
-      
-      <section id="sectionLogin" class="max-w-md mx-auto tactical-card p-6 sm:p-8 rounded-none">
-        <div class="text-center mb-6">
-          <div class="inline-block px-3 py-1 bg-orange-600/10 border border-orange-500/30 text-orange-400 text-xs font-mono uppercase mb-2">
-            Pangkalan Kawalan Akses
-          </div>
-          <h2 class="heading-font text-lg font-bold text-white">Sistem Pemarkahan Amali</h2>
-        </div>
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-center">
 
-        <div class="flex border-b border-slate-700 mb-6">
-          <button id="tabPelajar" onclick="tukarTabLogMasuk('pelajar')" class="w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono">
-            KADET/PELAJAR
-          </button>
-          <button id="tabPensyarah" onclick="tukarTabLogMasuk('pensyarah')" class="w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono">
-            PENSYARAH / PENILAI
-          </button>
-        </div>
-
-        <div id="formLoginPelajar" class="space-y-4">
-          <div>
-            <label class="block text-xs font-mono text-gray-400 mb-1">No. Kad Pengenalan (Isi Angka Sahaja)</label>
-            <input type="text" id="inputKP" placeholder="Contoh: 030415101234" class="w-full p-3 tactical-input font-mono text-sm tracking-widest">
-          </div>
-          <button onclick="prosesMasukPelajar()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
-            <span>Sahkan Identiti Kadet</span>
-            <div id="spinPelajar" class="loader hidden"></div>
-          </button>
-        </div>
-
-        <div id="formLoginPensyarah" class="space-y-4 hidden">
-          <div>
-            <label class="block text-xs font-mono text-gray-400 mb-1">Kata Laluan Pentadbiran</label>
-            <input type="password" id="inputKatalaluan" placeholder="••••••••" class="w-full p-3 tactical-input text-sm font-mono">
-          </div>
-          <button onclick="prosesMasukPensyarah()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
-            <span>Masuk Portal Penilai</span>
-            <div id="spinPensyarah" class="loader hidden"></div>
-          </button>
-        </div>
+    <section id="page-login" class="max-w-md w-full mx-auto py-12 transition-all duration-500 transform scale-100">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-apm-blue via-apm-orange to-amber-500"></div>
         
-        <div id="loginMsg" class="mt-4 p-3 bg-red-950/40 border border-red-900/60 text-center text-xs text-red-400 font-mono hidden rounded"></div>
-      </section>
-
-      <section id="sectionPelajar" class="hidden max-w-2xl mx-auto tactical-card p-6 rounded-none">
-        <div class="border-b border-slate-700 pb-4 mb-6">
-          <span class="text-xs font-mono bg-blue-900/50 text-blue-400 border border-blue-800 px-2 py-0.5 rounded">PROFIL SQUAD KADET</span>
-          <h2 id="pelajarNamaHeader" class="heading-font text-xl font-bold text-white mt-2">-</h2>
-          <p id="pelajarKPHeader" class="text-xs text-gray-400 font-mono mt-0.5">-</p>
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-white mb-2">Portal Log Masuk</h2>
+          <p class="text-slate-400 text-sm">Pentaksiran Berterusan & Kemas Kini Biodata Kor SISPA II</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="text-center md:col-span-1">
-            <div class="w-full aspect-[3/4] bg-slate-900 border border-slate-700 flex flex-col items-center justify-center relative overflow-hidden">
-              <img id="previewGambar" src="" class="w-full h-full object-cover hidden">
-              <div id="placeholderGambar" class="text-[10px] text-slate-500 font-mono">TIADA DATA FOTO</div>
-            </div>
-          </div>
-          <div class="md:col-span-2 space-y-4">
-            <div>
-              <label class="block text-xs font-mono text-gray-400 mb-1">Nombor Badan Kor SISPA</label>
-              <input type="text" id="studentNoBadan" placeholder="SISPA/2026/045" class="w-full p-3 tactical-input font-mono text-sm">
-            </div>
-            <div>
-              <label class="block text-xs font-mono text-gray-400 mb-1">Foto Unifor Terkini (JPG/PNG)</label>
-              <input type="file" id="studentFile" accept="image/*" onchange="bacaFailGambar(this)" class="w-full text-xs text-slate-400">
-            </div>
-            <button onclick="hantarKemaskiniPelajar()" class="w-full py-3 btn-tactical text-xs uppercase flex justify-center items-center space-x-2">
-              <span>Kemaskini Fail Profil</span>
-              <div id="spinUpdatePelajar" class="loader hidden"></div>
-            </button>
-          </div>
-        </div>
-      </section>
 
-      <section id="sectionDashboardPensyarah" class="hidden space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#172A45] p-4 border border-[#2C3E50]">
+        <div class="flex bg-slate-950 p-1 rounded-xl mb-6 border border-slate-800">
+          <button id="role-pelajar-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 bg-apm-orange text-white" onclick="selectRole('pelajar')">
+            <i class="fa-solid fa-user-graduate mr-2"></i>Pelajar
+          </button>
+          <button id="role-pensyarah-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold text-slate-400 transition-all duration-300 hover:text-white" onclick="selectRole('pensyarah')">
+            <i class="fa-solid fa-chalkboard-user mr-2"></i>Pensyarah
+          </button>
+        </div>
+
+        <div id="login-pelajar-form" class="space-y-4">
           <div>
-            <h2 class="heading-font text-base font-bold text-white">Pentaksiran Berterusan Kor SISPA II</h2>
+            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">No. Kad Pengenalan</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-id-card"></i>
+              </span>
+              <input type="text" id="login-kp" placeholder="Contoh: 030815020123" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
+            </div>
           </div>
-          <input type="text" id="carianPelajar" oninput="tapisPelajar()" placeholder="Cari nama atau No. KP..." class="w-full sm:w-72 p-2 tactical-input text-xs font-mono mt-2 sm:mt-0">
+          <button class="w-full bg-gradient-to-r from-apm-blue to-blue-700 hover:from-apm-orange hover:to-orange-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-500 transform hover:-translate-y-0.5" onclick="processLoginPelajar()">
+            Masuk Portal Pelajar <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+          </button>
         </div>
-        <div class="bg-slate-900 border border-slate-800 overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="border-b border-slate-800 bg-slate-950 font-mono text-gray-400 uppercase">
-                <th class="p-4 w-16">Foto</th>
-                <th class="p-4">Nama Kadet</th>
-                <th class="p-4">No. Kad Pengenalan</th>
-                <th class="p-4">No. Badan</th>
-                <th class="p-4 text-center">Skor Akhir (100%)</th>
-                <th class="p-4 text-right">Tindakan</th>
-              </tr>
-            </thead>
-            <tbody id="senaraiPelajarBody" class="divide-y divide-slate-800"></tbody>
-          </table>
-        </div>
-      </section>
 
-      <section id="sectionBorangPemarkahan" class="hidden space-y-6">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-700 pb-4 gap-4">
+        <div id="login-pensyarah-form" class="space-y-4 hidden">
+          <div class="p-4 bg-orange-500/10 border border-apm-orange/20 rounded-xl text-xs text-apm-orange leading-relaxed">
+            <i class="fa-solid fa-circle-info mr-1.5"></i> Sebagai keselamatan, pensyarah boleh mengakses terus senarai markah semua pelajar. Sila masukkan Nama anda untuk menandatangani rekod penilaian.
+          </div>
           <div>
-            <button onclick="kembaliKeDashboard()" class="text-xs text-orange-400 hover:underline font-mono">← KEMBALI PORTAL</button>
-            <h2 id="nilaiNama" class="heading-font text-lg font-bold text-white mt-1">-</h2>
-            <p id="nilaiDetail" class="text-xs text-gray-400 font-mono">-</p>
-          </div>
-          <div class="bg-slate-950 p-3 border border-slate-800 flex items-center space-x-4">
-            <div>
-              <div class="text-[10px] font-mono text-gray-400">Est. Skor</div>
-              <div id="skorBesar" class="heading-font text-2xl font-extrabold text-[#FF6B00]">0.0%</div>
-            </div>
-            <div>
-              <div class="text-[10px] font-mono text-gray-400">Gred Unjuran</div>
-              <div id="gredBesar" class="text-xs font-bold font-mono text-slate-400">-</div>
+            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">Nama Pensyarah / Penilai</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-user-shield"></i>
+              </span>
+              <input type="text" id="login-pensyarah-nama" placeholder="Contoh: Mejar (PA) Musaidi" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
             </div>
           </div>
+          <button class="w-full bg-gradient-to-r from-apm-orange to-amber-600 hover:from-blue-600 hover:to-apm-blue text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-500 transform hover:-translate-y-0.5" onclick="processLoginPensyarah()">
+            Buka Dashboard Pensyarah <i class="fa-solid fa-shield-halved ml-2"></i>
+          </button>
         </div>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 space-y-4">
-            <div class="tactical-card p-5 space-y-4">
-              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 1: UJIAN AMALI (70%) <span id="subtotalAmali" class="float-right text-white">0.0/70%</span></h3>
-              
-              <div class="space-y-3 font-mono text-xs">
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">1. Pengurusan Perkhemahan - HP3 (Wajaran 10%)</span>
-                  <input type="number" id="m_a1_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">2. Pengurusan Perkhemahan - HP8 (Wajaran 5%)</span>
-                  <input type="number" id="m_a1_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">3. Amali Tali & Ikatan - HP3 (Wajaran 15%)</span>
-                  <input type="number" id="m_a2_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">4. Pengurusan Bencana - HP3 (Wajaran 10%)</span>
-                  <input type="number" id="m_a3_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">5. Navigasi Darat - HP3 (Wajaran 5%)</span>
-                  <input type="number" id="m_a4_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">6. Navigasi Darat - HP8 (Wajaran 5%)</span>
-                  <input type="number" id="m_a4_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">7. Amali Kebudayaan - HP3 (Wajaran 5%)</span>
-                  <input type="number" id="m_a5_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">8. Amali Kebudayaan - HP8 (Wajaran 5%)</span>
-                  <input type="number" id="m_a5_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">9. Keterlibatan Komuniti - HP3 (Wajaran 5%)</span>
-                  <input type="number" id="m_a6_hp3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">10. Keterlibatan Komuniti - HP8 (Wajaran 5%)</span>
-                  <input type="number" id="m_a6_hp8" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
-                </div>
+    <section id="page-student" class="hidden transition-all duration-500 flex flex-col gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden card-glow transition-all">
+          <div class="absolute top-0 right-0 p-3">
+            <span class="px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-md text-[10px] font-mono font-bold uppercase">Pelajar Aktif</span>
+          </div>
+          
+          <div class="relative group mb-4">
+            <div class="w-32 h-32 rounded-full border-4 border-slate-800 overflow-hidden bg-slate-950 flex items-center justify-center relative">
+              <img id="student-photo" src="" class="w-full h-full object-cover hidden">
+              <span id="student-photo-placeholder" class="text-slate-600 text-4xl"><i class="fa-solid fa-user-astronaut"></i></span>
+            </div>
+            <label class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs font-semibold text-white">
+              <i class="fa-solid fa-camera text-lg mb-1"></i>
+              <span>Kemaskini</span>
+              <input type="file" id="photo-upload-input" class="hidden" accept="image/*" onchange="previewAndUploadPhoto(event)">
+            </label>
+          </div>
+
+          <h3 id="student-name-display" class="text-xl font-bold text-white mb-1">Nama Pelajar</h3>
+          <p id="student-kp-display" class="text-slate-400 text-xs font-mono mb-4">000000-00-0000</p>
+          
+          <div class="w-full pt-4 border-t border-slate-800 flex flex-col gap-3">
+            <div>
+              <label class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold mb-1">No Badan Pertahanan Awam</label>
+              <div class="flex gap-2">
+                <input type="text" id="student-nobadan-input" class="flex-grow bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-sm text-center font-mono font-bold focus:outline-none focus:border-apm-orange transition-colors">
+                <button class="bg-apm-orange text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-orange-600 transition-colors" onclick="saveStudentBiodataUpdate()">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                </button>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="tactical-card p-5 space-y-4">
-              <h3 class="font-bold text-xs text-orange-400 font-mono border-b border-slate-700 pb-2">TUGASAN 2: LAPORAN REFLEKTIF (30%) <span id="subtotalReflektif" class="float-right text-white">0.0/30%</span></h3>
-              <div class="space-y-3 font-mono text-xs">
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">11. Laporan Kognitif - HP2 (Wajaran 5%)</span>
-                  <input type="number" id="m_ref_hp2" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between card-glow transition-all">
+          <div>
+            <h4 class="text-md font-bold text-white border-b border-slate-800 pb-3 mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-apm-orange"></i> Informasi Kursus & Unit Uniform
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div>
+                  <span class="block text-xs text-slate-500 font-bold uppercase tracking-wider">Kumpulan</span>
+                  <span id="student-kumpulan-display" class="text-sm font-semibold text-white">-</span>
                 </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">12. Laporan Kognitif - KKG1 (Wajaran 5%)</span>
-                  <input type="number" id="m_ref_kkg1" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                <div>
+                  <span class="block text-xs text-slate-500 font-bold uppercase tracking-wider">Semester</span>
+                  <span id="student-semester-display" class="text-sm font-semibold text-white">-</span>
                 </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">13. Kemahiran Komunikasi - HP4 (Wajaran 10%)</span>
-                  <input type="number" id="m_ref_hp4" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <span class="block text-xs text-slate-500 font-bold uppercase tracking-wider">Ambilan</span>
+                  <span id="student-ambilan-display" class="text-sm font-semibold text-white">-</span>
                 </div>
-                <div class="flex justify-between items-center bg-slate-950 p-2.5 border border-slate-800 rounded">
-                  <span class="w-3/4">14. Tingkah Laku Positif - KMI3 (Wajaran 10%)</span>
-                  <input type="number" id="m_ref_kmi3" min="0" max="100" value="0" oninput="kiraSkorMasaNyata()" class="w-16 p-1 text-center bg-slate-900 border border-slate-700 text-orange-400 rounded">
+                <div>
+                  <span class="block text-xs text-slate-500 font-bold uppercase tracking-wider">Kod & Kursus</span>
+                  <span class="text-sm font-semibold text-white">MPU3481b Kokurikulum - Kor SISPA II</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="lg:col-span-1">
-            <div class="tactical-card p-4 space-y-4">
-              <label class="block text-xs font-mono text-gray-400">Ulasan Pentaksir Profesional</label>
-              <textarea id="ulasanPentaksir" rows="6" class="w-full p-2 text-xs tactical-input" placeholder="Tulis ulasan portfolio..."></textarea>
-              <button onclick="hantarPemarkahan()" class="w-full py-3 btn-tactical uppercase text-xs flex justify-center items-center space-x-2">
-                <span>Kunci Markah Mentah</span>
-                <div id="spinSimpanMarkah" class="loader hidden"></div>
-              </button>
+          <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-3 gap-4 text-center">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+              <span class="block text-[10px] text-slate-500 font-bold">AMALI (70%)</span>
+              <span id="score-amali-70" class="text-lg font-bold text-apm-accent font-mono">0.00 / 70</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+              <span class="block text-[10px] text-slate-500 font-bold">REFLEKTIF (30%)</span>
+              <span id="score-reflektif-30" class="text-lg font-bold text-apm-orange font-mono">0.00 / 30</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-apm-orange/30 bg-gradient-to-br from-slate-950 to-apm-orange/5">
+              <span class="block text-[10px] text-apm-orange font-bold">JUMLAH (100%)</span>
+              <span id="score-total-100" class="text-xl font-extrabold text-white font-mono">0.00%</span>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-    </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 card-glow transition-all">
+        <h3 class="text-lg font-bold text-white mb-6 flex items-center justify-between border-b border-slate-800 pb-4">
+          <span><i class="fa-solid fa-list-check text-apm-orange mr-2"></i>Pecahan Markah Pentaksiran Berterusan</span>
+          <span class="text-xs font-mono text-slate-400">Status Penilaian Semasa</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <h4 class="font-bold text-sm text-apm-accent"><i class="fa-solid fa-campground mr-2"></i>TUGASAN 1: Ujian Amali (Wajaran 70%)</h4>
+            </div>
+            <div class="space-y-3" id="student-amali-breakdown-list"></div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <h4 class="font-bold text-sm text-apm-orange"><i class="fa-solid fa-book-open mr-2"></i>TUGASAN 2: Laporan Reflektif (Wajaran 30%)</h4>
+            </div>
+            <div class="space-y-3" id="student-reflektif-breakdown-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-lecturer" class="hidden transition-all duration-500 flex flex-col gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4">
+          <div class="p-3 bg-blue-500/10 text-apm-accent rounded-xl text-2xl"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <span class="block text-xs font-bold text-slate-500 uppercase font-mono">Jumlah Pelajar</span>
+            <span id="stat-total-students" class="text-2xl font-extrabold text-white font-mono">0</span>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4">
+          <div class="p-3 bg-orange-500/10 text-apm-orange rounded-xl text-2xl"><i class="fa-solid fa-chart-line"></i></div>
+          <div>
+            <span class="block text-xs font-bold text-slate-500 uppercase font-mono">Purata Gred Kelas</span>
+            <span id="stat-class-average" class="text-2xl font-extrabold text-white font-mono">0.0%</span>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4">
+          <div class="p-3 bg-green-500/10 text-green-400 rounded-xl text-2xl"><i class="fa-solid fa-square-check"></i></div>
+          <div>
+            <span class="block text-xs font-bold text-slate-500 uppercase font-mono">Penilaian Selesai</span>
+            <span id="stat-completed" class="text-2xl font-extrabold text-white font-mono">0 / 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col gap-4 max-h-[800px] overflow-hidden">
+          <h3 class="font-bold text-md text-white px-2 flex items-center gap-2">
+            <i class="fa-solid fa-address-book text-apm-orange"></i> Senarai Rekod Pelajar
+          </h3>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-sm"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" id="student-search" placeholder="Cari Nama atau No KP..." onkeyup="filterStudents()" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white focus:outline-none focus:border-apm-orange transition-all">
+          </div>
+          <div id="student-list-container" class="flex-grow overflow-y-auto custom-scrollbar flex flex-col gap-2 pr-1"></div>
+        </div>
+
+        <div class="lg:col-span-8 flex flex-col gap-6" id="grading-panel">
+          <div id="grading-empty-state" class="bg-slate-900 border border-slate-800 rounded-2xl p-16 text-center text-slate-500 flex flex-col items-center justify-center gap-4">
+            <div class="w-20 h-20 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-3xl text-slate-700"><i class="fa-solid fa-user-pen"></i></div>
+            <h4 class="text-lg font-bold text-slate-400">Tiada Pelajar Dipilih</h4>
+            <p class="text-sm text-slate-600">Sila pilih nama pelajar daripada senarai di sebelah untuk memulakan penilaian pentaksiran rubrik.</p>
+          </div>
+
+          <div id="grading-workspace" class="hidden bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-slate-950 p-6 border-b border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden flex items-center justify-center">
+                  <img id="grading-student-photo" src="" class="w-full h-full object-cover hidden">
+                  <span id="grading-student-photo-placeholder" class="text-slate-600 text-2xl"><i class="fa-solid fa-user"></i></span>
+                </div>
+                <div>
+                  <h4 id="grading-student-name" class="text-lg font-bold text-white">-</h4>
+                  <p id="grading-student-details" class="text-xs text-slate-400 font-mono">-</p>
+                </div>
+              </div>
+              <div class="bg-slate-900 p-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                <button id="toggle-evaluator-p1" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all" onclick="selectEvaluator('P1')">Penilai 1 (P1)</button>
+                <button id="toggle-evaluator-p2" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all" onclick="selectEvaluator('P2')">Penilai 2 (P2)</button>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-8">
+              <div>
+                <h5 class="text-sm font-bold text-apm-accent uppercase tracking-wider border-b border-slate-800 pb-2 mb-4"><i class="fa-solid fa-campground mr-2"></i>Tugasan 1: Ujian Amali (70%)</h5>
+                <div class="space-y-6">
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">1. Pengurusan Perkhemahan (15%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">PK_HP3 (Skala 0.0 - 10.0)</label>
+                        <input type="number" step="0.1" min="0" max="10" id="input-PK_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">PK_HP8 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-PK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">2. Tali &amp; Ikatan (15%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">TI_HP3a (Skala 0.0 - 10.0)</label>
+                        <input type="number" step="0.1" min="0" max="10" id="input-TI_HP3a" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">TI_HP3b (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-TI_HP3b" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <label class="block text-xs text-slate-400">3. PB_HP3: Pengurusan Bencana (Skala 0.0 - 10.0)</label>
+                    <input type="number" step="0.1" min="0" max="10" id="input-PB_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">4. Navigasi Darat (10%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">ND_HP3 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-ND_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">ND_HP8 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-ND_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">5. Kebudayaan (10%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">KB_HP3 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-KB_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">KB_HP8 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-KB_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">6. Keterlibatan Komuniti (10%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">KK_HP3 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-KK_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">KK_HP8 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-KK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h5 class="text-sm font-bold text-apm-orange uppercase tracking-wider border-b border-slate-800 pb-2 mb-4"><i class="fa-solid fa-book-open mr-2"></i>Tugasan 2: Laporan Reflektif (30%)</h5>
+                <div class="space-y-6">
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">1. Kemahiran Kognitif (10%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">RK_HP2 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-RK_HP2" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">RK_KKG1 (Skala 0.0 - 5.0)</label>
+                        <input type="number" step="0.1" min="0" max="5" id="input-RK_KKG1" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                    <span class="text-xs font-bold text-white block">2. Kemahiran Komunikasi (20%)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">RK_HP4 (Skala 0.0 - 10.0)</label>
+                        <input type="number" step="0.1" min="0" max="10" id="input-RK_HP4" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-slate-400 mb-1">RK_KMI3 (Skala 0.0 - 10.0)</label>
+                        <input type="number" step="0.1" min="0" max="10" id="input-RK_KMI3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-xs text-slate-500 font-mono">* Markah dikira secara purata P1 &amp; P2 pada Sheets.</span>
+                <button class="w-full md:w-auto bg-gradient-to-r from-apm-orange to-amber-500 hover:from-apm-blue hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg" onclick="submitAssessment()">
+                  <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Hantar &amp; Simpan Penilaian
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
-    let databasePelajar = [], pelajarAktif = null;
-    let base64GambarData = null, base64GambarMime = "", base64GambarNama = "";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx8qBpJzJnrPxfAkVw-HSFXoyAEe4WgtC1kdLREaWyLY0p3x3_7jlY4FL4fP7wzI-3c/exec";
 
-    function tukarTabLogMasuk(tab) {
-      document.getElementById('loginMsg').classList.add('hidden');
-      if (tab === 'pelajar') {
-        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
-        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
-        document.getElementById('formLoginPelajar').classList.remove('hidden');
-        document.getElementById('formLoginPensyarah').classList.add('hidden');
+    let currentRole = 'pelajar';
+    let loggedInStudent = null;
+    let allStudentsData = [];
+    let currentSelectedStudentForGrading = null;
+    let currentSelectedEvaluator = 'P1';
+    let currentLecturerName = 'Pensyarah Penilai';
+
+    window.onload = function() {
+      document.getElementById('mode-badge').innerText = "Mod API Live";
+      fetchStudentsDataFromBackend();
+    }
+
+    function showLoading(show) {
+      const loader = document.getElementById('global-loader');
+      if (show) loader.classList.remove('hidden');
+      else loader.classList.add('hidden');
+    }
+
+    async function callAPI(action, data = {}) {
+      支配 = true;
+      showLoading(true);
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action, ...data })
+        });
+        const result = await response.json();
+        showLoading(false);
+        return result;
+      } catch (err) {
+        showLoading(false);
+        console.error(err);
+        showToast('Ralat Hubungan', 'Gagal memproses data. Sila pastikan pautan API aktif.', 'error');
+        return { success: false, message: err.toString() };
+      }
+    }
+
+    function showToast(title, message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-slate-900 border-green-500 text-green-400',
+        error: 'bg-slate-900 border-red-500 text-red-400',
+        info: 'bg-slate-900 border-blue-500 text-blue-400'
+      };
+      const icons = { success: 'fa-solid fa-circle-check', error: 'fa-solid fa-triangle-exclamation', info: 'fa-solid fa-circle-info' };
+
+      toast.className = `p-4 border rounded-xl shadow-2xl flex items-start gap-3 transition-all duration-300 ${colors[type]}`;
+      toast.innerHTML = `
+        <div class="text-lg"><i class="${icons[type]}"></i></div>
+        <div class="flex-grow">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-200">${title}</h4>
+          <p class="text-xs text-slate-400 mt-1">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-slate-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 4000);
+    }
+
+    function selectRole(role) {
+      currentRole = role;
+      const pelajarBtn = document.getElementById('role-pelajar-btn');
+      const pensyarahBtn = document.getElementById('role-pensyarah-btn');
+      const pelajarForm = document.getElementById('login-pelajar-form');
+      const pensyarahForm = document.getElementById('login-pensyarah-form');
+
+      if (role === 'pelajar') {
+        pelajarBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-semibold bg-apm-orange text-white";
+        pensyarahBtn.className = "flex-1 py-2.5 rounded-lg text-sm text-slate-400";
+        pelajarForm.classList.remove('hidden');
+        pensyarahForm.classList.add('hidden');
       } else {
-        document.getElementById('tabPensyarah').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-orange-500 text-orange-400 font-mono";
-        document.getElementById('tabPelajar').className = "w-1/2 py-2 text-center font-bold text-xs border-b-2 border-transparent text-gray-400 hover:text-white font-mono";
-        document.getElementById('formLoginPensyarah').classList.remove('hidden');
-        document.getElementById('formLoginPelajar').classList.add('hidden');
+        pensyarahBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-semibold bg-apm-orange text-white";
+        pelajarBtn.className = "flex-1 py-2.5 rounded-lg text-sm text-slate-400";
+        pensyarahForm.classList.remove('hidden');
+        pelajarForm.classList.add('hidden');
       }
     }
 
-    function prosesMasukPelajar() {
-      const kp = document.getElementById('inputKP').value.trim();
-      const msg = document.getElementById('loginMsg');
-      const spin = document.getElementById('spinPelajar');
-      
-      if(!kp) { msg.textContent = 'Sila masukkan IC Kadet.'; msg.classList.remove('hidden'); return; }
-      msg.classList.add('hidden'); spin.classList.remove('hidden');
+    async function processLoginPelajar() {
+      const kpVal = document.getElementById('login-kp').value.trim();
+      if (!kpVal) {
+        showToast('Perhatian', 'Sila isi nombor Kad Pengenalan anda.', 'error');
+        return;
+      }
 
-      google.script.run
-        .withSuccessHandler(function(respons) {
-          spin.classList.add('hidden');
-          if (respons.status === 'SUCCESS') { pelajarAktif = respons.data; bukaPortalPelajar(); } 
-          else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
-        })
-        .withFailureHandler(function(err) {
-          spin.classList.add('hidden');
-          msg.textContent = "Ralat: " + (err ? err.message : 'Kebenaran disekat.');
-          msg.classList.remove('hidden');
-        })
-        .logMasukPelajar(kp);
-    }
-
-    function prosesMasukPensyarah() {
-      const pass = document.getElementById('inputKatalaluan').value;
-      const msg = document.getElementById('loginMsg');
-      const spin = document.getElementById('spinPensyarah');
-      if (pass === 'sispa2026') {
-        msg.classList.add('hidden'); spin.classList.remove('hidden');
-        google.script.run
-          .withSuccessHandler(function(respons) {
-            spin.classList.add('hidden');
-            if(respons.status === 'SUCCESS') { databasePelajar = respons.senarai; bukaDashboardPensyarah(); } 
-            else { msg.textContent = respons.mesej; msg.classList.remove('hidden'); }
-          })
-          .withFailureHandler(function(err) { spin.classList.add('hidden'); msg.textContent = err.message; msg.classList.remove('hidden'); })
-          .dapatkanSenaraiPelajar();
-      } else { msg.textContent = 'Kata Laluan Pentadbiran Salah!'; msg.classList.remove('hidden'); }
-    }
-
-    function bukaPortalPelajar() {
-      document.getElementById('sectionLogin').classList.add('hidden');
-      document.getElementById('sectionPelajar').classList.remove('hidden');
-      document.getElementById('userInfo').classList.remove('hidden');
-      document.getElementById('userBadgeName').textContent = pelajarAktif.nama;
-      document.getElementById('pelajarNamaHeader').textContent = pelajarAktif.nama;
-      document.getElementById('pelajarKPHeader').textContent = "IC: " + pelajarAktif.noKP;
-      document.getElementById('studentNoBadan').value = pelajarAktif.noBadan;
-      if(pelajarAktif.gambarUrl) pamerGambarPreview(pelajarAktif.gambarUrl);
-    }
-
-    function bacaFailGambar(input) {
-      if (input.files && input.files[0]) {
-        const fail = input.files[0];
-        base64GambarNama = fail.name; base64GambarMime = fail.type;
-        const pembaca = new FileReader();
-        pembaca.onload = function(e) {
-          base64GambarData = e.target.result;
-          document.getElementById('previewGambar').src = base64GambarData;
-          document.getElementById('previewGambar').classList.remove('hidden');
-          document.getElementById('placeholderGambar').classList.add('hidden');
+      const response = await callAPI('loginPelajar', { noKp: kpVal });
+      if (response.success) {
+        loggedInStudent = response.data;
+        const dataResponse = await callAPI('getLecturerData');
+        if (dataResponse.success) {
+          allStudentsData = dataResponse.students;
+          const fullStudent = allStudentsData.find(s => s.biodata.noKp === kpVal);
+          showStudentDashboard(fullStudent || { biodata: loggedInStudent });
+        } else {
+          showStudentDashboard({ biodata: loggedInStudent });
         }
-        pembaca.readAsDataURL(fail);
+        showToast('Berjaya', `Selamat datang, ${loggedInStudent.nama}!`, 'success');
+      } else {
+        showToast('Ralat', response.message, 'error');
       }
     }
 
-    function pamerGambarPreview(url) {
-      const img = document.getElementById('previewGambar');
-      let formattedUrl = url;
-      if(url.includes('drive.google.com/file/d/')) {
-        formattedUrl = 'https://docs.google.com/uc?export=view&id=' + url.split('/d/')[1].split('/')[0];
+    async function processLoginPensyarah() {
+      const namaPenilai = document.getElementById('login-pensyarah-nama').value.trim();
+      if (!namaPenilai) {
+        showToast('Perhatian', 'Sila isi Nama Pensyarah Penilai.', 'error');
+        return;
       }
-      img.src = formattedUrl; img.classList.remove('hidden');
-      document.getElementById('placeholderGambar').classList.add('hidden');
+      currentLecturerName = namaPenilai;
+
+      const response = await callAPI('getLecturerData');
+      if (response.success) {
+        allStudentsData = response.students;
+        showLecturerDashboard();
+        showToast('Sistem Bersedia', `Selamat datang, ${namaPenilai}!`, 'success');
+      } else {
+        showToast('Gagal', 'Tidak dapat memuatkan data dari Google Sheets.', 'error');
+      }
     }
 
-    function hantarKemaskiniPelajar() {
-      const noBadan = document.getElementById('studentNoBadan').value.trim();
-      const spin = document.getElementById('spinUpdatePelajar');
-      if(!noBadan) { alert("Isi nombor badan."); return; }
-      spin.classList.remove('hidden');
-      google.script.run
-        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); })
-        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
-        .kemaskiniProfilPelajar({ row: pelajarAktif.row, noBadan: noBadan, fileData: base64GambarData, fileName: base64GambarNama, fileType: base64GambarMime });
+    function logout() {
+      loggedInStudent = null;
+      currentSelectedStudentForGrading = null;
+      document.getElementById('page-login').classList.remove('hidden');
+      document.getElementById('page-student').classList.add('hidden');
+      document.getElementById('page-lecturer').classList.add('hidden');
+      document.getElementById('logout-btn').classList.add('hidden');
     }
 
-    function bukaDashboardPensyarah() {
-      document.getElementById('sectionLogin').classList.add('hidden');
-      document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
-      document.getElementById('userInfo').classList.remove('hidden');
-      document.getElementById('userBadgeName').textContent = "PENSYARAH";
-      binaJadualPelajar(databasePelajar);
+    function showStudentDashboard(student) {
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('page-student').classList.remove('hidden');
+      document.getElementById('logout-btn').classList.remove('hidden');
+
+      document.getElementById('student-name-display').innerText = student.biodata.nama;
+      document.getElementById('student-kp-display').innerText = `NO KP: ${student.biodata.noKp}`;
+      document.getElementById('student-kumpulan-display').innerText = student.biodata.kumpulan || '-';
+      document.getElementById('student-semester-display').innerText = student.biodata.semester || '-';
+      document.getElementById('student-ambilan-display').innerText = student.biodata.ambilan || '-';
+      document.getElementById('student-nobadan-input').value = student.biodata.noBadan || '';
+
+      const photoEl = document.getElementById('student-photo');
+      const placeholderEl = document.getElementById('student-photo-placeholder');
+      if (student.biodata.gambarUrl) {
+        photoEl.src = student.biodata.gambarUrl;
+        photoEl.classList.remove('hidden');
+        placeholderEl.classList.add('hidden');
+      } else {
+        photoEl.classList.add('hidden');
+        placeholderEl.cursor = 'pointer';
+        placeholderEl.classList.remove('hidden');
+      }
+
+      const amaliScore = student.amali?.F?.jumlahAmali_70 || 0;
+      const reflektifScore = student.reflektif?.F?.jumlahReflektif_30 || 0;
+      const totalScore = student.reflektif?.F?.skorAkhir_100 || 0;
+
+      document.getElementById('score-amali-70').innerText = `${window.Number(amaliScore).toFixed(2)} / 70`;
+      document.getElementById('score-reflektif-30').innerText = `${window.Number(reflektifScore).toFixed(2)} / 30`;
+      document.getElementById('score-total-100').innerText = `${window.Number(totalScore).toFixed(2)}%`;
+
+      populateStudentAmaliBreakdown(student.amali || {});
+      populateStudentReflektifBreakdown(student.reflektif || {});
     }
 
-    function binaJadualPelajar(senarai) {
-      const tbody = document.getElementById('senaraiPelajarBody');
-      tbody.innerHTML = '';
-      senarai.forEach(function(p, indeks) {
-        let txtM = p.markahAkhir !== null ? `<span class="font-bold text-orange-400 font-mono">${p.markahAkhir.toFixed(1)}%</span>` : `<span class="text-gray-600 font-mono">-</span>`;
-        let tr = document.createElement('tr');
-        tr.className = "border-b border-slate-800 hover:bg-slate-800/30";
-        tr.innerHTML = `<td class="p-4">...</td><td class="p-4 font-bold text-white">${p.nama}</td><td class="p-4 font-mono text-gray-400">${p.noKP}</td><td class="p-4 font-mono text-slate-300">${p.noBadan}</td><td class="p-4 text-center">${txtM}</td><td class="p-4 text-right"><button onclick="bukaBorangPenilaian(${indeks})" class="px-3 py-1 bg-slate-800 border border-slate-700 text-orange-400 hover:bg-orange-500 hover:text-black font-bold uppercase">NILAI</button></td>`;
-        tbody.appendChild(tr);
+    function populateStudentAmaliBreakdown(amali) {
+      const container = document.getElementById('student-amali-breakdown-list');
+      container.innerHTML = '';
+      const items = [
+        { label: 'Pengurusan Perkhemahan - HP3', score: amali.F?.PK_HP3 || 0, max: 10 },
+        { label: 'Pengurusan Perkhemahan - HP8', score: amali.F?.PK_HP8 || 0, max: 5 },
+        { label: 'Ikatan & Simpulan - HP3', score: amali.F?.TI_HP3a || 0, max: 10 },
+        { label: 'Kraf Gajet - HP3', score: amali.F?.TI_HP3b || 0, max: 5 },
+        { label: 'Pengurusan Bencana - HP3', score: amali.F?.PB_HP3 || 0, max: 10 },
+        { label: 'Navigasi Darat (Peta) - HP3', score: amali.F?.ND_HP3 || 0, max: 5 },
+        { label: 'Navigasi Darat (Kepimpinan) - HP8', score: amali.F?.ND_HP8 || 0, max: 5 },
+        { label: 'Kebudayaan - HP3', score: amali.F?.KB_HP3 || 0, max: 5 },
+        { label: 'Kebudayaan - HP8', score: amali.F?.KB_HP8 || 0, max: 5 },
+        { label: 'Keterlibatan Komuniti - HP3', score: amali.F?.KK_HP3 || 0, max: 5 },
+        { label: 'Keterlibatan Komuniti - HP8', score: amali.F?.KK_HP8 || 0, max: 5 }
+      ];
+      items.forEach(item => {
+        const pct = (item.score / item.max) * 100;
+        container.innerHTML += `
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-400">${item.label}</span>
+              <span class="font-bold font-mono text-white">${window.Number(item.score).toFixed(2)} / ${item.max}</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1">
+              <div class="bg-blue-500 h-1 rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>`;
       });
     }
 
-    function tapisPelajar() {
-      const c = document.getElementById('carianPelajar').value.toLowerCase();
-      binaJadualPelajar(databasePelajar.filter(p => p.nama.toLowerCase().includes(c) || p.noKP.toLowerCase().includes(c)));
+    function populateStudentReflektifBreakdown(reflektif) {
+      const container = document.getElementById('student-reflektif-breakdown-list');
+      container.innerHTML = '';
+      const items = [
+        { label: 'Kognitif - HP2', score: reflektif.F?.RK_HP2 || 0, max: 5 },
+        { label: 'Kognitif - KKG1', score: reflektif.F?.RK_KKG1 || 0, max: 5 },
+        { label: 'Komunikasi - HP4', score: reflektif.F?.RK_HP4 || 0, max: 10 },
+        { label: 'Komunikasi - KMI3', score: reflektif.F?.RK_KMI3 || 0, max: 10 }
+      ];
+      items.forEach(item => {
+        const pct = (item.score / item.max) * 100;
+        container.innerHTML += `
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-400">${item.label}</span>
+              <span class="font-bold font-mono text-white">${window.Number(item.score).toFixed(2)} / ${item.max}</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1">
+              <div class="bg-orange-500 h-1 rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>`;
+      });
     }
 
-    function bukaBorangPenilaian(indeks) {
-      pelajarAktif = databasePelajar[indeks];
-      document.getElementById('sectionDashboardPensyarah').classList.add('hidden');
-      document.getElementById('sectionBorangPemarkahan').classList.remove('hidden');
-      document.getElementById('nilaiNama').textContent = pelajarAktif.nama;
-      document.getElementById('nilaiDetail').textContent = `IC: ${pelajarAktif.noKP}`;
-      kiraSkorMasaNyata();
-    }
+    function previewAndUploadPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        document.getElementById('student-photo').src = e.target.result;
+        document.getElementById('student-photo').classList.remove('hidden');
+        document.getElementById('student-photo-placeholder').classList.add('hidden');
 
-    function kembaliKeDashboard() {
-      document.getElementById('sectionBorangPemarkahan').classList.add('hidden');
-      document.getElementById('sectionDashboardPensyarah').classList.remove('hidden');
-    }
-
-    function kiraSkorMasaNyata() {
-      const gv = id => { let v = parseFloat(document.getElementById(id).value) || 0; if(v>100)v=100; if(v<0)v=0; return v; };
-      const subA = (gv('m_a1_hp3')*0.1)+(gv('m_a1_hp8')*0.05)+(gv('m_a2_hp3')*0.15)+(gv('m_a3_hp3')*0.1)+(gv('m_a4_hp3')*0.05)+(gv('m_a4_hp8')*0.05)+(gv('m_a5_hp3')*0.05)+(gv('m_a5_hp8')*0.05)+(gv('m_a6_hp3')*0.05)+(gv('m_a6_hp8')*0.05);
-      const subB = (gv('m_ref_hp2')*0.05)+(gv('m_ref_kkg1')*0.05)+(gv('m_ref_hp4')*0.1)+(gv('m_ref_kmi3')*0.1);
-      const total = subA + subB;
-
-      document.getElementById('subtotalAmali').textContent = subA.toFixed(1) + "/70%";
-      document.getElementById('subtotalReflektif').textContent = subB.toFixed(1) + "/30%";
-      document.getElementById('skorBesar').textContent = total.toFixed(1) + "%";
-      document.getElementById('gredBesar').textContent = total >= 80 ? "CEMERLANG" : total >= 60 ? "KEPUJIAN" : total >= 40 ? "LULUS" : "GAGAL";
-    }
-
-    function hantarPemarkahan() {
-      const spin = document.getElementById('spinSimpanMarkah'); spin.classList.remove('hidden');
-      google.script.run
-        .withSuccessHandler(function(r) { spin.classList.add('hidden'); alert(r.mesej); kembaliKeDashboard(); })
-        .withFailureHandler(function(e) { spin.classList.add('hidden'); alert(e.message); })
-        .simpanPemarkahan({
-          noKP: pelajarAktif.noKP, nama: pelajarAktif.nama, noBadan: pelajarAktif.noBadan,
-          rawA1_hp3: parseFloat(document.getElementById('m_a1_hp3').value)||0,
-          rawA1_hp8: parseFloat(document.getElementById('m_a1_hp8').value)||0,
-          rawA2_hp3: parseFloat(document.getElementById('m_a2_hp3').value)||0,
-          rawA3_hp3: parseFloat(document.getElementById('m_a3_hp3').value)||0,
-          rawA4_hp3: parseFloat(document.getElementById('m_a4_hp3').value)||0,
-          rawA4_hp8: parseFloat(document.getElementById('m_a4_hp8').value)||0,
-          rawA5_hp3: parseFloat(document.getElementById('m_a5_hp3').value)||0,
-          rawA5_hp8: parseFloat(document.getElementById('m_a5_hp8').value)||0,
-          rawA6_hp3: parseFloat(document.getElementById('m_a6_hp3').value)||0,
-          rawA6_hp8: parseFloat(document.getElementById('m_a6_hp8').value)||0,
-          rawRef_hp2: parseFloat(document.getElementById('m_ref_hp2').value)||0,
-          rawRef_kkg1: parseFloat(document.getElementById('m_ref_kkg1').value)||0,
-          rawRef_hp4: parseFloat(document.getElementById('m_ref_hp4').value)||0,
-          rawRef_kmi3: parseFloat(document.getElementById('m_ref_kmi3').value)||0,
-          ulasan: document.getElementById('ulasanPentaksir').value
+        showToast('Memuat Naik', 'Menyimpan imej profil...', 'info');
+        const response = await callAPI('updateProfilPelajar', {
+          noKp: loggedInStudent.noKp,
+          noBadan: loggedInStudent.noBadan || '',
+          base64Photo: e.target.result,
+          fileName: file.name
         });
+        if (response.success) {
+          loggedInStudent.gambarUrl = response.data.gambarUrl;
+          showToast('Selesai', 'Foto disimpan ke Drive!', 'success');
+        }
+      }
+      reader.readAsDataURL(file);
     }
 
-    function logKeluar() { location.reload(); }
+    async function saveStudentBiodataUpdate() {
+      const noBadanVal = document.getElementById('student-nobadan-input').value.trim();
+      if (!noBadanVal) return;
+      const response = await callAPI('updateProfilPelajar', { noKp: loggedInStudent.noKp, noBadan: noBadanVal, base64Photo: null, fileName: null });
+      if (response.success) {
+        loggedInStudent.noBadan = noBadanVal;
+        showToast('Berjaya', 'Nombor Badan telah dikemas kini.', 'success');
+      }
+    }
+
+    async function fetchStudentsDataFromBackend(callback) {
+      const response = await callAPI('getLecturerData');
+      if (response.success) {
+        allStudentsData = response.students;
+        if (callback) callback();
+      }
+    }
+
+    function showLecturerDashboard() {
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('page-lecturer').classList.remove('hidden');
+      document.getElementById('logout-btn').classList.remove('hidden');
+      updateLecturerStats();
+      buildStudentList();
+    }
+
+    function updateLecturerStats() {
+      document.getElementById('stat-total-students').innerText = allStudentsData.length;
+      let evaluatedCount = 0, totalScoreSum = 0;
+      allStudentsData.forEach(student => {
+        const finalScore = student.reflektif?.F?.skorAkhir_100 || 0;
+        if (finalScore > 0) { evaluatedCount++; totalScoreSum += window.Number(finalScore); }
+      });
+      const avg = evaluatedCount > 0 ? (totalScoreSum / evaluatedCount).toFixed(1) : '0.0';
+      document.getElementById('stat-class-average').innerText = `${avg}%`;
+      document.getElementById('stat-completed').innerText = `${evaluatedCount} / ${allStudentsData.length}`;
+    }
+
+    function buildStudentList() {
+      const container = document.getElementById('student-list-container');
+      container.innerHTML = '';
+      allStudentsData.forEach(student => {
+        const hasGrades = (student.reflektif?.F?.skorAkhir_100 || 0) > 0;
+        const totalPct = window.Number(student.reflektif?.F?.skorAkhir_100 || 0).toFixed(1);
+        container.innerHTML += `
+          <button onclick="selectStudentForGrading('${student.biodata.noKp}')" class="w-full bg-slate-950/40 hover:bg-slate-800 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden">
+                ${student.biodata.gambarUrl ? `<img src="${student.biodata.gambarUrl}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user-ninja text-slate-500"></i>`}
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white truncate max-w-[150px]">${student.biodata.nama}</h4>
+                <p class="text-[10px] text-slate-500 font-mono">${student.biodata.noBadan || 'Tiada No'}</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono ${hasGrades ? 'text-green-400' : 'text-slate-600'}">${hasGrades ? totalPct + '%' : 'Belum'}</span>
+          </button>`;
+      });
+    }
+
+    function filterStudents() {
+      const query = document.getElementById('student-search').value.toLowerCase();
+      const buttons = document.getElementById('student-list-container').getElementsByTagName('button');
+      for (let i = 0; i < buttons.length; i++) {
+        const text = buttons[i].innerText.toLowerCase();
+        if (text.includes(query)) buttons[i].classList.remove('hidden');
+        else buttons[i].classList.add('hidden');
+      }
+    }
+
+    function selectStudentForGrading(noKp) {
+      const student = allStudentsData.find(s => s.biodata.noKp === noKp);
+      if (!student) return;
+      currentSelectedStudentForGrading = student;
+      document.getElementById('grading-empty-state').classList.add('hidden');
+      document.getElementById('grading-workspace').classList.remove('hidden');
+      document.getElementById('grading-student-name').innerText = student.biodata.nama;
+      document.getElementById('grading-student-details').innerText = `No KP: ${student.biodata.noKp} • No Badan: ${student.biodata.noBadan || 'Belum Daftar'}`;
+      
+      const photoEl = document.getElementById('grading-student-photo');
+      const placeholderEl = document.getElementById('grading-student-photo-placeholder');
+      if (student.biodata.gambarUrl) {
+        photoEl.src = student.biodata.gambarUrl; photoEl.classList.remove('hidden'); placeholderEl.classList.add('hidden');
+      } else {
+        photoEl.classList.add('hidden'); placeholderEl.classList.remove('hidden');
+      }
+      selectEvaluator('P1');
+    }
+
+    function selectEvaluator(evaluator) {
+      currentSelectedEvaluator = evaluator;
+      const btn1 = document.getElementById('toggle-evaluator-p1');
+      const btn2 = document.getElementById('toggle-evaluator-p2');
+      if (evaluator === 'P1') {
+        btn1.className = "px-4 py-1.5 rounded-lg text-xs font-bold bg-apm-orange text-white";
+        btn2.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400";
+      } else {
+        btn2.className = "px-4 py-1.5 rounded-lg text-xs font-bold bg-apm-orange text-white";
+        btn1.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400";
+      }
+      const scores = currentSelectedStudentForGrading.amali[evaluator] || {};
+      const refScores = currentSelectedStudentForGrading.reflektif[evaluator] || {};
+
+      document.getElementById('input-PK_HP3').value = scores.PK_HP3 || 0;
+      document.getElementById('input-PK_HP8').value = scores.PK_HP8 || 0;
+      document.getElementById('input-TI_HP3a').value = scores.TI_HP3a || 0;
+      document.getElementById('input-TI_HP3b').value = scores.TI_HP3b || 0;
+      document.getElementById('input-PB_HP3').value = scores.PB_HP3 || 0;
+      document.getElementById('input-ND_HP3').value = scores.ND_HP3 || 0;
+      document.getElementById('input-ND_HP8').value = scores.ND_HP8 || 0;
+      document.getElementById('input-KB_HP3').value = scores.KB_HP3 || 0;
+      document.getElementById('input-KB_HP8').value = scores.KB_HP8 || 0;
+      document.getElementById('input-KK_HP3').value = scores.KK_HP3 || 0;
+      document.getElementById('input-KK_HP8').value = scores.KK_HP8 || 0;
+      document.getElementById('input-RK_HP2').value = refScores.RK_HP2 || 0;
+      document.getElementById('input-RK_KKG1').value = refScores.RK_KKG1 || 0;
+      document.getElementById('input-RK_HP4').value = refScores.RK_HP4 || 0;
+      document.getElementById('input-RK_KMI3').value = refScores.RK_KMI3 || 0;
+    }
+
+    function validateInputRange(input, maxVal) {
+      let val = parseFloat(input.value);
+      if (val < 0 || isNaN(val)) input.value = 0;
+      if (val > maxVal) input.value = maxVal;
+    }
+
+    async function submitAssessment() {
+      if (!currentSelectedStudentForGrading) return;
+      const scores = {
+        PK_HP3: parseFloat(document.getElementById('input-PK_HP3').value || 0),
+        PK_HP8: parseFloat(document.getElementById('input-PK_HP8').value || 0),
+        TI_HP3a: parseFloat(document.getElementById('input-TI_HP3a').value || 0),
+        TI_HP3b: parseFloat(document.getElementById('input-TI_HP3b').value || 0),
+        PB_HP3: parseFloat(document.getElementById('input-PB_HP3').value || 0),
+        ND_HP3: parseFloat(document.getElementById('input-ND_HP3').value || 0),
+        ND_HP8: parseFloat(document.getElementById('input-ND_HP8').value || 0),
+        KB_HP3: parseFloat(document.getElementById('input-KB_HP3').value || 0),
+        KB_HP8: parseFloat(document.getElementById('input-KB_HP8').value || 0),
+        KK_HP3: parseFloat(document.getElementById('input-KK_HP3').value || 0),
+        KK_HP8: parseFloat(document.getElementById('input-KK_HP8').value || 0),
+        RK_HP2: parseFloat(document.getElementById('input-RK_HP2').value || 0),
+        RK_KKG1: parseFloat(document.getElementById('input-RK_KKG1').value || 0),
+        RK_HP4: parseFloat(document.getElementById('input-RK_HP4').value || 0),
+        RK_KMI3: parseFloat(document.getElementById('input-RK_KMI3').value || 0)
+      };
+
+      const response = await callAPI('saveAssessment', {
+        evaluatorType: currentSelectedEvaluator,
+        noKp: currentSelectedStudentForGrading.biodata.noKp,
+        scores: scores,
+        evaluatorName: currentLecturerName
+      });
+
+      if (response.success) {
+        showToast('Berjaya Simpan', 'Markah penilaian berjaya dihantar ke Google Sheets!', 'success');
+        const refreshResponse = await callAPI('getLecturerData');
+        if (refreshResponse.success) {
+          allStudentsData = refreshResponse.students;
+          showLecturerDashboard();
+          selectStudentForGrading(currentSelectedStudentForGrading.biodata.noKp);
+        }
+      }
+    }
   </script>
 </body>
 </html>
