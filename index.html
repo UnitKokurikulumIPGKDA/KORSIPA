@@ -9,7 +9,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -134,7 +134,7 @@
 
         <div id="login-pensyarah-form" class="space-y-4 hidden">
           <div class="p-4 bg-orange-500/10 border border-apm-orange/20 rounded-xl text-xs text-apm-orange leading-relaxed">
-            <i class="fa-solid fa-circle-info mr-1.5"></i> Akses terhad untuk Pensyarah Pentaksir. Sila isi No. Kad Pengenalan/No. Staf anda dan taip kod laluan pengesahan keselamatan dengan betul.
+            <i class="fa-solid fa-circle-info mr-1.5"></i> Akses terhad untuk Pensyarah Pentaksir. Sila isi No. KP / No. Staf Penilai anda dan masukkan kod laluan pengesahan keselamatan rahsia.
           </div>
           <div>
             <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 font-mono">No. KP / No. Staf Penilai (Angka Sahaja)</label>
@@ -142,7 +142,7 @@
               <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
                 <i class="fa-solid fa-hashtag"></i>
               </span>
-              <input type="text" id="login-pensyarah-id" placeholder="Contoh: 760102025555" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
+              <input type="text" id="login-pensyarah-id" placeholder="Masukkan nombor staf / No KP" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
             </div>
           </div>
           <div>
@@ -151,7 +151,7 @@
               <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
                 <i class="fa-solid fa-key"></i>
               </span>
-              <input type="password" id="login-pensyarah-kod" placeholder="Taip kod keselamatan di sini" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
+              <input type="password" id="login-pensyarah-kod" placeholder="Taip kod keselamatan rahsia" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-apm-orange focus:ring-2 focus:ring-apm-orange/20 transition-all">
             </div>
           </div>
           <button class="w-full bg-gradient-to-r from-apm-orange to-amber-600 hover:from-blue-600 hover:to-apm-blue text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-500 transform hover:-translate-y-0.5" onclick="processLoginPensyarah()">
@@ -170,14 +170,14 @@
           </div>
           
           <div class="relative group mb-4">
-            <div class="w-36 h-44 rounded-xl border-2 border-dashed border-slate-700 p-1 bg-slate-950 flex items-center justify-center relative overflow-hidden">
-              <img id="student-photo" src="" class="w-full h-full object-cover object-center rounded-lg hidden shadow-lg">
+            <div class="w-36 h-44 rounded-xl border-2 border-slate-700/80 p-0.5 bg-slate-950 flex items-center justify-center relative overflow-hidden">
+              <img id="student-photo" src="" class="w-full h-full object-cover object-center rounded-lg hidden shadow-inner">
               <div id="student-photo-placeholder" class="text-slate-600 flex flex-col items-center justify-center gap-2">
                 <i class="fa-solid fa-user-tie text-4xl"></i>
                 <span class="text-[9px] uppercase font-mono tracking-wider text-slate-500">Foto Pasport</span>
               </div>
             </div>
-            <label class="absolute inset-1 bg-black/70 rounded-lg flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs font-semibold text-white">
+            <label class="absolute inset-0 bg-black/75 rounded-xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs font-semibold text-white">
               <i class="fa-solid fa-cloud-arrow-up text-xl mb-1 text-apm-orange"></i>
               <span>Muat Naik Foto</span>
               <input type="file" id="photo-upload-input" class="hidden" accept="image/*" onchange="previewAndUploadPhoto(event)">
@@ -276,6 +276,7 @@
       </div>
 
       <div id="lecturer-workspace-panel" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
         <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col gap-4 max-h-[800px] overflow-hidden">
           <h3 class="font-bold text-md text-white px-2 flex items-center gap-2">
             <i class="fa-solid fa-address-book text-apm-orange"></i> Senarai Rekod Pelajar
@@ -298,7 +299,7 @@
             <div class="bg-slate-950 p-6 border-b border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
               <div class="flex items-center gap-4">
                 <div class="w-14 h-16 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden flex items-center justify-center">
-                  <img id="grading-student-photo" src="" class="w-full h-full object-cover object-center rounded-lg max-w-full max-h-full block hidden">
+                  <img id="grading-student-photo" src="" class="w-full h-full object-cover object-center rounded-lg max-w-full max-h-full block hidden animate-fade-in">
                   <span id="grading-student-photo-placeholder" class="text-slate-600 text-xl"><i class="fa-solid fa-user"></i></span>
                 </div>
                 <div>
@@ -322,10 +323,30 @@
                       <div>
                         <label class="block text-xs text-slate-400 mb-1">PK_HP3 (Skala 0.0 - 10.0)</label>
                         <input type="number" step="0.1" min="0" max="10" id="input-PK_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–4.9):</span> Tidak dapat mengurus peralatan, tapak perkhemahan, taklimat &amp; jadual. Tidak mampu mengurus kerohanian, kecergasan, riadah &amp; istiadat perbarisan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (5.0–5.9):</span> Lulus dalam pengurusan peralatan/tapak/taklimat/jadual. Mengurus kerohanian, kecergasan, riadah &amp; istiadat perbarisan secara sederhana.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (6.0–7.4):</span> Kepujian dalam pengurusan peralatan/tapak/taklimat/jadual serta aktiviti kerohanian, kecergasan, riadah &amp; istiadat perbarisan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (7.5–8.9):</span> Cemerlang dalam pengurusan peralatan/tapak/taklimat/jadual serta aktiviti kerohanian, riadah &amp; istiadat perbarisan.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (9.0–10.0):</span> Amat cemerlang dalam semua aspek pengurusan perkhemahan, kerohanian, kecergasan, riadah &amp; istiadat perbarisan.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">PK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">PK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-PK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tidak memahami peranan; tidak berupaya mengorganisasi kepimpinan, autonomi &amp; tanggungjawab dalam pasukan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang memahami peranan; kepimpinan/autonomi/tanggungjawab pada tahap sederhana.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Memahami peranan &amp; berupaya memainkan sebahagian besar peranan dengan baik dalam pasukan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Memahami peranan &amp; berupaya memainkan peranan dalam pasukan dengan baik.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat memahami peranan; berupaya memainkan peranan dengan aktif dan cemerlang.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -335,27 +356,77 @@
                       <div>
                         <label class="block text-xs text-slate-400 mb-1">TI_HP3a (Skala 0.0 - 10.0)</label>
                         <input type="number" step="0.1" min="0" max="10" id="input-TI_HP3a" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–4.9):</span> Tidak berkemahiran membuat ikatan simpulan &amp; kegunaannya. Tidak berkemahiran dalam kraf perkhemahan (tujuan, faedah, jenis gajet).</p>
+                            <p><span class="font-bold text-orange-400">Lulus (5.0–5.9):</span> Boleh buat 2 jenis ikatan simpulan sahaja. Sederhana dalam kraf perkhemahan.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (6.0–7.4):</span> Boleh buat 3 jenis ikatan simpulan. Berkemahiran dalam kraf perkhemahan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (7.5–8.9):</span> Boleh buat 4 jenis ikatan simpulan. Berkemahiran dalam kraf perkhemahan.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (9.0–10.0):</span> Boleh buat 5 jenis ikatan simpulan. Sangat berkemahiran dalam kraf perkhemahan.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">TI_HP3b (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">TI_HP3b (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-TI_HP3b" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tiada kemahiran membuat ikatan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang kemahiran; boleh buat 2 jenis ikatan.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Boleh buat 3 jenis ikatan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Boleh buat 4 jenis ikatan.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Boleh buat 5 jenis ikatan.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
                   <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
                     <label class="block text-xs text-slate-400">3. PB_HP3: Pengurusan Bencana (Skala 0.0 - 10.0)</label>
                     <input type="number" step="0.1" min="0" max="10" id="input-PB_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                    <details class="mt-1.5">
+                      <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                      <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                        <p><span class="font-bold text-red-400">Lemah (0.0–4.9):</span> Lemah dalam pengurusan bencana alam/peperangan (arahan MKN), PPS, menu/masakan/sanitasi. Gagal dalam simulasi bencana.</p>
+                        <p><span class="font-bold text-orange-400">Lulus (5.0–5.9):</span> Lulus dalam pengurusan bencana, PPS, menu/masakan/sanitasi &amp; simulasi bencana.</p>
+                        <p><span class="font-bold text-yellow-400">Kepujian (6.0–7.4):</span> Kepujian dalam pengurusan bencana, PPS, menu/masakan/sanitasi &amp; simulasi bencana.</p>
+                        <p><span class="font-bold text-blue-400">Cemerlang (7.5–8.9):</span> Cemerlang dalam pengurusan bencana, PPS, menu/masakan/sanitasi &amp; simulasi bencana.</p>
+                        <p><span class="font-bold text-green-400">Amat Cemerlang (9.0–10.0):</span> Amat cemerlang dalam semua aspek pengurusan bencana, PPS, menu/masakan/sanitasi &amp; simulasi bencana.</p>
+                      </div>
+                    </details>
                   </div>
                   <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
                     <span class="text-xs font-bold text-white block">4. Navigasi Darat (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">ND_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">ND_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-ND_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Gagal dalam peraturan/persediaan/prosedur navigasi darat. Tidak berkemahiran membaca peta topo &amp; simbol.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Sederhana dalam peraturan/persediaan/prosedur navigasi darat &amp; membaca peta topo/simbol.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Kepujian dalam peraturan/persediaan/prosedur navigasi darat; berkemahiran membaca peta topo/simbol.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Cemerlang dalam peraturan/persediaan/prosedur navigasi darat; berkemahiran membaca peta topo/simbol.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Amat cemerlang; sangat berkemahiran membaca peta topo, kegunaan &amp; mengesan tanda/simbol.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">ND_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">ND_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-ND_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tidak memahami peranan; tidak berupaya mengorganisasi kepimpinan, autonomi &amp; tanggungjawab dalam pasukan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang memahami peranan; kepimpinan/autonomi/tanggungjawab pada tahap sederhana.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Memahami peranan &amp; berupaya memainkan sebahagian besar peranan dengan baik dalam pasukan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Memahami peranan &amp; berupaya memainkan peranan dalam pasukan dengan baik.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat memahami peranan; berupaya memainkan peranan dengan aktif dan cemerlang.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -363,12 +434,32 @@
                     <span class="text-xs font-bold text-white block">5. Kebudayaan (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KB_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">KB_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-KB_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Gagal dalam pengurusan malam kebudayaan. Tidak dapat mempamerkan mesej keamanan &amp; lagu pertubuhan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang kemahiran dalam pengurusan malam kebudayaan. Tidak dapat mempamerkan mesej keamanan &amp; lagu.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Kepujian dalam pengurusan malam kebudayaan; mempamerkan mesej keamanan &amp; lagu pertubuhan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Cemerlang dalam pengurusan malam kebudayaan; mempamerkan mesej keamanan &amp; lagu pertubuhan.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Amat cemerlang dalam pengurusan malam kebudayaan; mempamerkan mesej keamanan &amp; lagu pertubuhan.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KB_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">KB_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-KB_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tidak memahami peranan; tidak berupaya mengorganisasi kepimpinan, autonomi &amp; tanggungjawab dalam pasukan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang memahami peranan; kepimpinan/autonomi/tanggungjawab pada tahap sederhana.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Memahami peranan &amp; berupaya memainkan sebahagian besar peranan dengan baik dalam pasukan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Memahami peranan &amp; berupaya memainkan peranan dalam pasukan dengan baik.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat memahami peranan; berupaya memainkan peranan dengan aktif dan cemerlang.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -376,12 +467,32 @@
                     <span class="text-xs font-bold text-white block">6. Keterlibatan Komuniti (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KK_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">KK_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-KK_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Gagal dalam khidmat kesukarelawan, masyarakat &amp; kempen derma darah. Gagal mempamerkan gaya hidup lestari.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Sederhana dalam khidmat kesukarelawan/masyarakat/derma darah &amp; gaya hidup lestari.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Kepujian dalam khidmat kesukarelawan/masyarakat/derma darah &amp; gaya hidup lestari.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Cemerlang dalam khidmat kesukarelawan/masyarakat/derma darah &amp; gaya hidup lestari.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Amat cemerlang dalam khidmat kesukarelawan/masyarakat/derma darah &amp; gaya hidup lestari.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">KK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-KK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tidak memahami peranan; tidak berupaya mengorganisasi kepimpinan, autonomi &amp; tanggungjawab dalam pasukan.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Kurang memahami peranan; kepimpinan/autonomi/tanggungjawab pada tahap sederhana.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Memahami peranan &amp; berupaya memainkan sebahagian peranan dengan baik dalam pasukan.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Memahami peranan &amp; berupaya memainkan peranan dalam pasukan dengan baik.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat memahami peranan; berupaya memainkan peranan dengan aktif dan cemerlang.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -395,12 +506,32 @@
                     <span class="text-xs font-bold text-white block">1. Kemahiran Kognitif (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_HP2 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">RK_HP2 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-RK_HP2" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Sangat lemah mengaplikasikan pelaksanaan perkhemahan &amp; sangat lemah mengembang/membaiki kemahiran berfikir (HP2 C3).</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Masih dapat mengaplikasikan pelaksanaan perkhemahan; lemah mengembang/membaiki kemahiran berfikir.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Sederhana dalam menilai pelaksanaan perkhemahan &amp; mengembang/membaiki kemahiran berfikir.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Berkebolehan mengaplikasikan pelaksanaan perkhemahan &amp; mengembang/membaiki kemahiran berfikir.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat berkebolehan mengaplikasikan pelaksanaan perkhemahan &amp; mengembang/membaiki kemahiran berfikir.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_KKG1 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maks 5</span></label>
+                        <label class="block text-xs text-slate-400 mb-1">RK_KKG1 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
                         <input type="number" step="0.1" min="0" max="5" id="input-RK_KKG1" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–2.4):</span> Tidak berkebolehan mengaplikasikan pengetahuan/kemahiran/konsep Pemikiran Komputasional menggunakan kemahiran berfikir.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (2.5–2.9):</span> Berkebolehan mengaplikasikan pengetahuan/kemahiran/konsep Pemikiran Komputasional menggunakan kemahiran berfikir.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (3.0–3.7):</span> Berkebolehan mengaplikasikan dalam konteks yang terhad.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (3.8–4.4):</span> Berkebolehan mengaplikasikan dalam pelbagai konteks.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (4.5–5.0):</span> Sangat berkebolehan mengaplikasikan dalam pelbagai konteks secara terperinci &amp; jelas.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -410,10 +541,30 @@
                       <div>
                         <label class="block text-xs text-slate-400 mb-1">RK_HP4 (Skala 0.0 - 10.0)</label>
                         <input type="number" step="0.1" min="0" max="10" id="input-RK_HP4" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–4.9):</span> Sangat lemah membina hubungan/berinteraksi/bekerja secara efektif. Sangat lemah menyampaikan idea dengan jelas &amp; yakin.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (5.0–5.9):</span> Masih dapat membina hubungan/berinteraksi/bekerja secara efektif; lemah menyampaikan idea.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (6.0–7.4):</span> Sederhana membina hubungan/berinteraksi/bekerja secara efektif &amp; menyampaikan idea.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (7.5–8.9):</span> Berkebolehan membina hubungan/berinteraksi/bekerja secara efektif &amp; menyampaikan idea dengan jelas &amp; yakin.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (9.0–10.0):</span> Sangat berkebolehan membina hubungan &amp; menyampaikan idea dengan jelas, berkesan &amp; penuh keyakinan.</p>
+                          </div>
+                        </details>
                       </div>
                       <div>
                         <label class="block text-xs text-slate-400 mb-1">RK_KMI3 (Skala 0.0 - 10.0)</label>
                         <input type="number" step="0.1" min="0" max="10" id="input-RK_KMI3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <details class="mt-1.5">
+                          <summary class="text-[10px] text-apm-accent cursor-pointer select-none hover:text-white transition-colors list-none flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Rujukan Rubrik</summary>
+                          <div class="mt-1.5 bg-slate-950 border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-[10px] text-slate-400 leading-relaxed">
+                            <p><span class="font-bold text-red-400">Lemah (0.0–4.9):</span> Lemah dalam komunikasi &amp; gagal menarik minat audien. Tidak berketerampilan/tingkahlaku positif terhad.</p>
+                            <p><span class="font-bold text-orange-400">Lulus (5.0–5.9):</span> Kurang memuaskan dalam komunikasi &amp; kurang menarik minat audien; kurang berketerampilan &amp; tingkahlaku positif.</p>
+                            <p><span class="font-bold text-yellow-400">Kepujian (6.0–7.4):</span> Agak memuaskan dalam komunikasi &amp; agak berjaya menarik minat audien; memuaskan berketerampilan &amp; tingkahlaku positif.</p>
+                            <p><span class="font-bold text-blue-400">Cemerlang (7.5–8.9):</span> Baik dalam komunikasi &amp; menarik minat audien; baik berketerampilan, tingkahlaku positif &amp; memberi penghargaan.</p>
+                            <p><span class="font-bold text-green-400">Amat Cemerlang (9.0–10.0):</span> Cemerlang dalam komunikasi, amat berjaya menarik minat audien; sangat berjaya mengamalkan tingkahlaku positif, penghargaan &amp; suri teladan.</p>
+                          </div>
+                        </details>
                       </div>
                     </div>
                   </div>
@@ -480,26 +631,145 @@
       fetchStudentsDataFromBackend();
     }
 
-    // Fungsi Penukur Pautan Drive Terselamat Bebas Ralat Sekatan Kuki Pelayar
-    function getCleanDriveUrl(url) {
+    // ============================================================
+    // MODUL PAPARAN GAMBAR (DIBAIKI)
+    // Strategi: cuba pautan terus Google Drive dahulu (tiada isu
+    // CORS untuk elemen <img>), gagal barulah guna proksi base64
+    // dari Apps Script sebagai langkah sandaran.
+    // ============================================================
+
+    // Ekstrak Fail ID daripada pelbagai format pautan Google Drive
+    function extractDriveFileId(url) {
       if (!url) return '';
       var s = String(url).trim();
-      if (s.indexOf('data:image') === 0 || s.indexOf('googleusercontent.com') !== -1) {
+      if (s.indexOf('data:image') === 0) return '';
+
+      var dMatch = s.match(/\/d\/([^\/]+)/);
+      var idMatch = s.match(/[?&]id=([^&]+)/);
+
+      if (dMatch && dMatch[1]) return dMatch[1];
+      if (idMatch && idMatch[1]) return idMatch[1];
+
+      // Jika hanya ID sahaja yang disimpan dalam sel (bukan URL penuh)
+      if (s.length > 15 && s.indexOf('/') === -1 && s.indexOf(' ') === -1) {
         return s;
       }
-      if (s.indexOf('drive.google.com') !== -1) {
-        var dMatch = s.match(/\/d\/([^\/]+)/);
-        var idMatch = s.match(/[?&]id=([^&]+)/);
-        var fileId = '';
-        
-        if (dMatch && dMatch[1]) { fileId = dMatch[1]; }
-        else if (idMatch && idMatch[1]) { fileId = idMatch[1]; }
-        
-        if (fileId) {
-          return 'https://docs.google.com/uc?export=view&id=' + fileId;
+      return '';
+    }
+
+    // Uji sama ada satu URL imej boleh dimuat terus oleh pelayar (tiada CORS untuk <img>)
+    function tryLoadImageDirect(src) {
+      return new Promise((resolve) => {
+        const testImg = new Image();
+        testImg.onload = () => resolve(true);
+        testImg.onerror = () => resolve(false);
+        testImg.referrerPolicy = 'no-referrer';
+        testImg.src = src;
+      });
+    }
+
+    // Fungsi Utama: Memuat gambar profil (Kad Pelajar / Workspace Pentaksir)
+    async function loadSecureImage(url, targetImgId, targetPlaceholderId) {
+      const imgEl = document.getElementById(targetImgId);
+      const placeholderEl = document.getElementById(targetPlaceholderId);
+
+      if (!imgEl || !placeholderEl) return;
+
+      if (!url) {
+        imgEl.classList.add('hidden');
+        placeholderEl.classList.remove('hidden');
+        return;
+      }
+
+      if (url.startsWith('data:image')) {
+        imgEl.src = url;
+        imgEl.classList.remove('hidden');
+        placeholderEl.classList.add('hidden');
+        return;
+      }
+
+      // 1. Cuba kaedah PANTAS: pautan terus thumbnail Google Drive
+      const fileId = extractDriveFileId(url);
+      if (fileId) {
+        const directUrl = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w600';
+        const ok = await tryLoadImageDirect(directUrl);
+        if (ok) {
+          imgEl.src = directUrl;
+          imgEl.classList.remove('hidden');
+          placeholderEl.classList.add('hidden');
+          return;
         }
       }
-      return s;
+
+      // 2. Fallback: Proksi Base64 melalui Apps Script (jika Kaedah 1 gagal —
+      //    biasanya disebabkan fail belum dikongsi "Sesiapa yang ada pautan")
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'getImage', url: url })
+        });
+        const result = await response.json();
+        if (result.success && result.base64) {
+          imgEl.src = result.base64;
+          imgEl.classList.remove('hidden');
+          placeholderEl.classList.add('hidden');
+        } else {
+          console.warn('Gagal muat gambar [' + targetImgId + ']: ' + (result.message || 'Sebab tidak diketahui'));
+          imgEl.classList.add('hidden');
+          placeholderEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error('Ralat proksi imej [' + targetImgId + ']:', e);
+        imgEl.classList.add('hidden');
+        placeholderEl.classList.remove('hidden');
+      }
+    }
+
+    // Pemuat Imej khas untuk Thumbnail Senarai Nama Pelajar di Bar Sisi
+    async function lazyLoadThumbnail(url, imgId, placeholderId) {
+      if (!url) return;
+      const imgEl = document.getElementById(imgId);
+      const phEl = document.getElementById(placeholderId);
+      if (!imgEl || !phEl) return;
+
+      if (url.startsWith('data:image')) {
+        imgEl.src = url;
+        imgEl.classList.remove('hidden');
+        phEl.classList.add('hidden');
+        return;
+      }
+
+      // 1. Cuba kaedah pantas dahulu
+      const fileId = extractDriveFileId(url);
+      if (fileId) {
+        const directUrl = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w150';
+        const ok = await tryLoadImageDirect(directUrl);
+        if (ok) {
+          imgEl.src = directUrl;
+          imgEl.classList.remove('hidden');
+          phEl.classList.add('hidden');
+          return;
+        }
+      }
+
+      // 2. Fallback proksi
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'getImage', url: url })
+      })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success && result.base64) {
+          imgEl.src = result.base64;
+          imgEl.classList.remove('hidden');
+          phEl.classList.add('hidden');
+        } else {
+          console.warn('Thumbnail gagal [' + imgId + ']: ' + (result.message || ''));
+        }
+      })
+      .catch(err => console.error('Ralat thumbnail [' + imgId + ']:', err));
     }
 
     function showLoading(show) {
@@ -635,7 +905,7 @@
       if (response.success) {
         allStudentsData = response.students;
         showLecturerDashboard();
-        showToast('Akses Dibuka', 'Selamat datang ke Dashboard Induk Pensyarah!', 'success');
+        showToast('Akses Opened', 'Pengesahan identiti keselamatan berjaya!', 'success');
       } else {
         showToast('Gagal', 'Tidak dapat memuatkan data dari Google Sheets.', 'error');
       }
@@ -662,17 +932,8 @@
       document.getElementById('student-ambilan-display').innerText = student.biodata.ambilan || '-';
       document.getElementById('student-nobadan-input').value = student.biodata.noBadan || '';
 
-      const photoEl = document.getElementById('student-photo');
-      const placeholderEl = document.getElementById('student-photo-placeholder');
-      
-      if (student.biodata.gambarUrl) {
-        photoEl.src = getCleanDriveUrl(student.biodata.gambarUrl);
-        photoEl.classList.remove('hidden');
-        placeholderEl.classList.add('hidden');
-      } else {
-        photoEl.classList.add('hidden');
-        placeholderEl.classList.remove('hidden');
-      }
+      // Panggilan Pemuat Imej (Kaedah Terus + Proksi Sandaran)
+      loadSecureImage(student.biodata.gambarUrl, 'student-photo', 'student-photo-placeholder');
     }
 
     function previewAndUploadPhoto(event) {
@@ -691,9 +952,7 @@
         
         if (response.success) {
           loggedInStudent.gambarUrl = response.data.gambarUrl;
-          document.getElementById('student-photo').src = getCleanDriveUrl(response.data.gambarUrl);
-          document.getElementById('student-photo').classList.remove('hidden');
-          document.getElementById('student-photo-placeholder').classList.add('hidden');
+          loadSecureImage(response.data.gambarUrl, 'student-photo', 'student-photo-placeholder');
           showToast('Selesai', 'Foto berjaya disimpan ke Drive dan Google Sheets!', 'success');
         } else {
           showToast('Ralat Muat Naik', response.message, 'error');
@@ -740,27 +999,36 @@
       document.getElementById('stat-completed').innerText = `${evaluatedCount} / ${allStudentsData.length}`;
     }
 
+    // Memapar Senarai Pelajar di Bar Sisi berserta Markah Purata Kumulatif Terkini & Thumbnail
     function buildStudentList() {
       const container = document.getElementById('student-list-container');
       container.innerHTML = '';
-      allStudentsData.forEach(student => {
+      allStudentsData.forEach((student, index) => {
         const hasGrades = (student.reflektif?.F?.skorAkhir_100 || 0) > 0;
         const totalPct = window.Number(student.reflektif?.F?.skorAkhir_100 || 0).toFixed(1);
+        const thumbImgId = 'thumb-img-' + index;
+        const thumbPhId = 'thumb-ph-' + index;
+        
         container.innerHTML += `
-          <button onclick="selectStudentForGrading('${student.biodata.noKp}')" class="w-full bg-slate-950/40 hover:bg-slate-800 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between text-left">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-12 rounded bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden flex-shrink-0">
-                ${student.biodata.gambarUrl ? `<img src="${getCleanDriveUrl(student.biodata.gambarUrl)}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user text-slate-600 text-xs"></i>`}
+          <button onclick="selectStudentForGrading('${student.biodata.noKp}')" class="w-full bg-slate-950/40 hover:bg-slate-800 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between text-left transition-colors">
+            <div class="flex items-center gap-3 overflow-hidden">
+              <div class="w-10 h-12 rounded bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+                <img id="${thumbImgId}" src="" class="w-full h-full object-cover hidden">
+                <span id="${thumbPhId}" class="text-slate-600 text-[10px] font-bold"><i class="fa-solid fa-user"></i></span>
               </div>
               <div class="overflow-hidden">
-                <h4 class="text-xs font-bold text-white truncate max-w-[150px]">${student.biodata.nama}</h4>
+                <h4 class="text-xs font-bold text-white truncate max-w-[140px]">${student.biodata.nama}</h4>
                 <p class="text-[10px] text-slate-500 font-mono truncate">No Badan: ${student.biodata.noBadan || 'Belum Ada'}</p>
               </div>
             </div>
-            <div class="text-right flex-shrink-0">
+            <div class="text-right flex-shrink-0 ml-1">
               <span class="block text-[10px] font-mono font-bold ${hasGrades ? 'text-green-400' : 'text-slate-600'}">${hasGrades ? totalPct + '%' : 'Belum'}</span>
             </div>
           </button>`;
+          
+          if (student.biodata.gambarUrl) {
+            lazyLoadThumbnail(student.biodata.gambarUrl, thumbImgId, thumbPhId);
+          }
       });
     }
 
@@ -819,17 +1087,8 @@
       document.getElementById('grading-student-name').innerText = student.biodata.nama;
       document.getElementById('grading-student-details').innerText = `No KP: ${student.biodata.noKp} • No Badan: ${student.biodata.noBadan || 'Belum Daftar'}`;
       
-      const photoEl = document.getElementById('grading-student-photo');
-      const placeholderEl = document.getElementById('grading-student-photo-placeholder');
-      
-      if (student.biodata.gambarUrl) {
-        photoEl.src = getCleanDriveUrl(student.biodata.gambarUrl); 
-        photoEl.classList.remove('hidden'); 
-        placeholderEl.classList.add('hidden');
-      } else {
-        photoEl.classList.add('hidden'); 
-        placeholderEl.classList.remove('hidden');
-      }
+      // Panggilan Pemuat Imej Workspace Pentaksir
+      loadSecureImage(student.biodata.gambarUrl, 'grading-student-photo', 'grading-student-photo-placeholder');
       selectEvaluator('P1');
     }
 
@@ -864,6 +1123,7 @@
       document.getElementById('input-RK_KMI3').value = refScores.RK_KMI3 || 0;
     }
 
+    // Melakukan Had Kawalan Sempadan Input Markah Secara Automatik
     function validateInputRange(input, maxVal) {
       let val = parseFloat(input.value);
       if (val < 0 || isNaN(val)) input.value = 0;
