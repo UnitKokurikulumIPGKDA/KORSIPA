@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistem Pentaksiran Kor SISPA II SEMESTER JUN-JULAI 2026| IPG KDA</title>
+  <title>Sistem Pentaksiran Kor SISPA II | IPG KDA</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -77,13 +77,38 @@
   <!-- NOTIFICATION TOAST ENGINE -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-md w-full pointer-events-none"></div>
 
+  <!-- MODAL RUJUKAN RUBRIK GLOBAL -->
+  <div id="rubric-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative overflow-hidden transition-all duration-300 transform scale-95 opacity-0" id="rubric-modal-card">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-apm-orange via-apm-blue to-apm-accent"></div>
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="modal-rubric-title" class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-graduation-cap text-apm-orange"></i> Rujukan Kriteria Rubrik
+        </h3>
+        <button onclick="closeRubricModal()" class="text-slate-400 hover:text-white transition-colors text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 flex items-center justify-between">
+        <span class="text-xs text-slate-400 uppercase font-mono font-bold">Kod Kriteria Semasa</span>
+        <span id="modal-rubric-max" class="px-2 py-0.5 rounded text-[10px] font-bold bg-apm-orange/10 text-apm-orange border border-apm-orange/30">Maks 10 Markah</span>
+      </div>
+
+      <div id="modal-rubric-content" class="text-xs space-y-3 max-h-[50vh] overflow-y-auto custom-scrollbar pr-1">
+        <!-- Kandungan tahap pencapaian dijana secara dinamik -->
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN HEADER -->
   <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-apm-orange to-amber-500 p-2.5 flex items-center justify-center shadow-lg shadow-apm-orange/20">
           <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 0121 12z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
           </svg>
         </div>
         <div>
@@ -346,11 +371,21 @@
                     <span class="text-xs font-bold text-white block">1. Pengurusan Perkhemahan (15%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">PK_HP3 (Skala 0.0 - 10.0)</label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">PK_HP3 (Skala 0.0 - 10.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('PK_HP3')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="10" id="input-PK_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">PK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">PK_HP8 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('PK_HP8')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-PK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -360,18 +395,33 @@
                     <span class="text-xs font-bold text-white block">2. Tali &amp; Ikatan (15%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">TI_HP3a (Skala 0.0 - 10.0)</label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">TI_HP3a (Skala 0.0 - 10.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('TI_HP3a')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="10" id="input-TI_HP3a" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">TI_HP3b (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">TI_HP3b (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('TI_HP3b')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-TI_HP3b" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
                   </div>
                   <!-- Pengurusan Bencana -->
                   <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-                    <label class="block text-xs text-slate-400">3. PB_HP3: Pengurusan Bencana (Skala 0.0 - 10.0)</label>
+                    <div class="flex items-center justify-between mb-1">
+                      <label class="block text-xs text-slate-400">3. PB_HP3: Pengurusan Bencana (Skala 0.0 - 10.0)</label>
+                      <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('PB_HP3')">
+                        <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                      </button>
+                    </div>
                     <input type="number" step="0.1" min="0" max="10" id="input-PB_HP3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                   </div>
                   <!-- Navigasi Darat -->
@@ -379,11 +429,21 @@
                     <span class="text-xs font-bold text-white block">4. Navigasi Darat (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">ND_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">ND_HP3 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('ND_HP3')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-ND_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">ND_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">ND_HP8 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('ND_HP8')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-ND_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -393,11 +453,21 @@
                     <span class="text-xs font-bold text-white block">5. Kebudayaan (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KB_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">KB_HP3 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('KB_HP3')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-KB_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KB_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">KB_HP8 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('KB_HP8')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-KB_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -407,11 +477,21 @@
                     <span class="text-xs font-bold text-white block">6. Keterlibatan Komuniti (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KK_HP3 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">KK_HP3 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('KK_HP3')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-KK_HP3" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">KK_HP8 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">KK_HP8 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('KK_HP8')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-KK_HP8" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -427,11 +507,21 @@
                     <span class="text-xs font-bold text-white block">1. Kemahiran Kognitif (10%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_HP2 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">RK_HP2 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('RK_HP2')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-RK_HP2" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_KKG1 (Skala 0.0 - 5.0) <span class="text-red-500 font-bold">*Maksimum 5.0</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">RK_KKG1 (Skala 0.0 - 5.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('RK_KKG1')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="5" id="input-RK_KKG1" oninput="validateInputRange(this, 5)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -440,11 +530,21 @@
                     <span class="text-xs font-bold text-white block">2. Kemahiran Komunikasi (20%)</span>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_HP4 (Skala 0.0 - 10.0)</label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">RK_HP4 (Skala 0.0 - 10.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('RK_HP4')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="10" id="input-RK_HP4" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                       <div>
-                        <label class="block text-xs text-slate-400 mb-1">RK_KMI3 (Skala 0.0 - 10.0)</label>
+                        <div class="flex items-center justify-between mb-1">
+                          <label class="block text-xs text-slate-400">RK_KMI3 (Skala 0.0 - 10.0)</label>
+                          <button type="button" class="text-[10px] text-apm-orange hover:underline font-bold flex items-center gap-1" onclick="showRubricModal('RK_KMI3')">
+                            <i class="fa-solid fa-circle-info"></i> Rujukan Rubrik
+                          </button>
+                        </div>
                         <input type="number" step="0.1" min="0" max="10" id="input-RK_KMI3" oninput="validateInputRange(this, 10)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
                       </div>
                     </div>
@@ -588,6 +688,219 @@
     window.onload = function() {
       document.getElementById('mode-badge').innerText = "Mod API Live";
       fetchStudentsDataFromBackend();
+    }
+
+    // ============================================================
+    // SEKATAN KELAS & DATA SPESIFIKASI RUJUKAN RUBRIK
+    // ============================================================
+    const rubricData = {
+      PK_HP3: {
+        title: "PK_HP3: Pengurusan Perkhemahan (Kemahiran Praktikal)",
+        max: "Skala Maksimum: 10.0 Markah",
+        levels: [
+          { range: "9.0 - 10.0 (Amat Cemerlang)", desc: "Sangat berkebolehan mengaplikasikan pelaksanaan perkhemahan (mengurus peralatan, tapak, taklimat, jadual, kerohanian, kecergasan diri, riadah, perbarisan pagi naik/turun bendera) dengan amat cemerlang." },
+          { range: "7.5 - 8.9 (Cemerlang)", desc: "Berkebolehan mengaplikasikan pelaksanaan perkhemahan dengan cemerlang." },
+          { range: "6.0 - 7.4 (Kepujian)", desc: "Mempunyai kemahiran yang baik dalam mengurus peralatan, tapak perkhemahan, dan taklimat dengan tahap kepujian." },
+          { range: "5.0 - 5.9 (Lulus)", desc: "Mampu mengurus tapak dan peralatan asas perkhemahan serta aktiviti riadah dengan tahap sederhana." },
+          { range: "0.0 - 4.9 (Lemah)", desc: "Lemah atau gagal mengurus peralatan, tapak perkhemahan, dan perbarisan pagi." }
+        ]
+      },
+      PK_HP8: {
+        title: "PK_HP8: Pengurusan Perkhemahan (Kepimpinan & Peranan Pasukan)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Kepimpinan, autonomi, dan tanggungjawab ditampilkan pada tahap amat cemerlang. Sangat memahami peranan dan memainkan peranan dalam pasukan dengan aktif (KAT2)." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Kepimpinan, autonomi, dan tanggungjawab cemerlang. Memahami peranan pasukan dengan baik." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Memahami sebahagian besar peranan dalam pasukan dan melaksanakannya dengan baik (KAT2)." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kurang memahami peranan dan kurang berupaya memainkan peranan dalam pasukan." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Tidak memahami peranan dan tidak berupaya memainkan peranan dalam pasukan." }
+        ]
+      },
+      TI_HP3a: {
+        title: "TI_HP3a: Tali & Ikatan (Kemahiran Simpulan)",
+        max: "Skala Maksimum: 10.0 Markah",
+        levels: [
+          { range: "9.0 - 10.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam membuat 5 jenis ikatan simpulan serta kegunaannya. Sangat berkemahiran dalam kraf perkhemahan dengan menyatakan faedah gajet." },
+          { range: "7.5 - 8.9 (Cemerlang)", desc: "Cemerlang dalam membuat 4 jenis ikatan simpulan serta kegunaannya dan kraf gajet." },
+          { range: "6.0 - 7.4 (Kepujian)", desc: "Dapat membuat 3 jenis ikatan simpulan serta menyatakan tujuan dan faedah membuat gajet dengan baik." },
+          { range: "5.0 - 5.9 (Lulus)", desc: "Kurang berkemahiran, hanya mampu membuat 2 jenis ikatan simpulan dan menyatakan kegunaan ringkas sahaja." },
+          { range: "0.0 - 4.9 (Lemah)", desc: "Tidak berkemahiran membuat ikatan simpulan, tidak tahu kegunaan serta gagal membuat kraf perkhemahan." }
+        ]
+      },
+      TI_HP3b: {
+        title: "TI_HP3b: Tali & Ikatan (Ikatan & Gajet)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam kemahiran membuat 5 jenis ikatan kraf perkhemahan secara kukuh dan estetik." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Cemerlang dan sangat mahir membuat 4 jenis ikatan untuk gajet perkhemahan." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Berkebolehan membuat 3 jenis ikatan kraf perkhemahan dengan baik dan berfungsi." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Hanya mahir membuat 2 jenis ikatan dengan kekukuhan sederhana." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Tiada kemahiran atau kurang daripada 2 jenis ikatan yang betul." }
+        ]
+      },
+      PB_HP3: {
+        title: "PB_HP3: Pengurusan Bencana (Kemahiran Praktikal)",
+        max: "Skala Maksimum: 10.0 Markah",
+        levels: [
+          { range: "9.0 - 10.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam pengurusan bencana alam/peperangan mengikut arahan MKN, pengurusan PPS, penyediaan menu, masakan, sanitasi, dan simulasi bencana." },
+          { range: "7.5 - 8.9 (Cemerlang)", desc: "Cemerlang dalam pengurusan bencana, PPS, penyediaan menu masakan, sanitasi, dan simulasi bencana." },
+          { range: "6.0 - 7.4 (Kepujian)", desc: "Kepujian dalam pengurusan bencana alam, penyediaan sanitasi di PPS, serta simulasi bencana secara baik." },
+          { range: "5.0 - 5.9 (Lulus)", desc: "Lulus sederhana dalam pengurusan pusat pemindahan sementara (PPS), menu masakan, dan simulasi bencana ringkas." },
+          { range: "0.0 - 4.9 (Lemah)", desc: "Lemah dalam semua aspek pengurusan bencana dan gagal dalam sesi simulasi bencana." }
+        ]
+      },
+      ND_HP3: {
+        title: "ND_HP3: Navigasi Darat (Kemahiran Membaca Peta Topo)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam peraturan, persediaan, dan prosedur navigasi. Sangat berkemahiran membaca peta topo, kegunaan, serta mengesan tanda/simbol." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Cemerlang dalam mempraktikkan prosedur navigasi darat dan berkemahiran membaca peta topo serta simbol." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Berkemahiran baik dalam membaca peta topo, kompas, kegunaan serta mengesan tanda navigasi." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Sederhana dalam peraturan navigasi darat dan tahap asas dalam kemahiran membaca peta topo." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Gagal dalam persediaan navigasi darat. Tidak berkemahiran membaca peta topo dan simbol." }
+        ]
+      },
+      ND_HP8: {
+        title: "ND_HP8: Navigasi Darat (Kepimpinan & Keputusan)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Keupayaan mengorganisasi kepimpinan, autonomi, dan tanggungjawab amat cemerlang. Sangat memahami peranan dan memimpin navigasi aktif (KAT2)." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Kepimpinan, autonomi, dan tanggungjawab cemerlang. Memimpin kumpulan navigasi dengan baik." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Keupayaan mengorganisasi kepimpinan baik. Berupaya memainkan sebahagian besar peranan navigasi." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kurang keyakinan memimpin. Sederhana dalam tanggungjawab dan peranan pasukan." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Lemah dalam kepimpinan pasukan navigasi dan tidak memainkan peranan aktif." }
+        ]
+      },
+      KB_HP3: {
+        title: "KB_HP3: Kebudayaan (Malam Kebudayaan & Lagu Pertubuhan)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam pengurusan malam kebudayaan. Mempamerkan mesej keamanan global dan menyanyikan lagu pertubuhan dengan amat cemerlang." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Cemerlang dalam pengurusan malam kebudayaan serta pembawaan mesej keamanan melalui persembahan." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Kepujian dalam persembahan kebudayaan, menyatakan lagu pertubuhan dengan baik dan tertib." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kurang kemahiran pengurusan malam kebudayaan, tetapi dapat mempamerkan lagu pertubuhan secara sederhana." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Gagal dalam malam kebudayaan. Tidak dapat mempamerkan mesej keamanan atau lagu pertubuhan." }
+        ]
+      },
+      KB_HP8: {
+        title: "KB_HP8: Kebudayaan (Kerjasama & Interaksi Pasukan)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Sangat memahami peranan kebudayaan kumpulan dan memimpin interaksi sosial dengan aktif serta amat cemerlang." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Organisasi kepimpinan dan tanggungjawab dalam persembahan kebudayaan cemerlang." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Memahami peranan dan berupaya bekerjasama dalam aktiviti kebudayaan dengan baik." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kurang penglibatan aktif dalam organisasi kebudayaan kumpulan." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Tidak memberikan sumbangan atau kerjasama dalam tugasan kebudayaan." }
+        ]
+      },
+      KK_HP3: {
+        title: "KK_HP3: Keterlibatan Komuniti (Khidmat Kesukarelawan)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Amat cemerlang dalam aktiviti kesukarelawan, khidmat masyarakat, kempen derma darah, serta mempamerkan gaya hidup lestari secara konsisten." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Cemerlang dalam khidmat kesukarelawan dan gaya hidup lestari semasa aktiviti komuniti." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Kepujian dalam memberikan khidmat masyarakat dan bekerjasama dalam kempen derma darah." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Terlibat secara sederhana dalam khidmat masyarakat tanpa inisiatif tambahan." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Gagal atau tidak mahu melibatkan diri dalam khidmat masyarakat dan kempen kesukarelawan." }
+        ]
+      },
+      KK_HP8: {
+        title: "KK_HP8: Keterlibatan Komuniti (Autonomi & Tanggungjawab)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Sangat memahami peranan dan mengetuai tugasan komuniti secara proaktif dengan nilai autonomi tinggi (KAT2)." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Cemerlang dalam kepimpinan dan memikul tanggungjawab khidmat masyarakat dengan baik." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Memahami peranan khidmat dan berupaya memainkan peranan dengan baik dalam kumpulan." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kurang autonomi, sekadar melaksana arahan kumpulan tanpa kepimpinan." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Tidak bertanggungjawab dan gagal melaksana peranan sosial pasukan." }
+        ]
+      },
+      RK_HP2: {
+        title: "RK_HP2: Kemahiran Kognitif (Refleksi & Pemikiran Kritis)",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Sangat berkebolehan mengaplikasikan pelaksanaan perkhemahan secara kritis, serta mengembang dan membaiki kemahiran berfikir dalam laporan reflektif." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Berkebolehan cemerlang dalam mengaplikasi dan membaiki kemahiran berfikir dalam laporan." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Sederhana dalam menilai pelaksanaan perkhemahan dan membina hujah berfikir." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Masih boleh mengaplikasi huraian perkhemahan namun sangat lemah dalam mengembang idea kritis." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Sangat lemah, gagal mengaplikasikan kemahiran kognitif berfikir dalam penulisan laporan." }
+        ]
+      },
+      RK_KKG1: {
+        title: "RK_KKG1: Pemikiran Komputasional",
+        max: "Skala Maksimum: 5.0 Markah",
+        levels: [
+          { range: "4.5 - 5.0 (Amat Cemerlang)", desc: "Sangat berkebolehan mengaplikasikan pengetahuan/kemahiran konsep Pemikiran Komputasional dalam pelbagai konteks secara terperinci dan jelas." },
+          { range: "3.8 - 4.4 (Cemerlang)", desc: "Berkebolehan mengaplikasi konsep Pemikiran Komputasional dalam pelbagai konteks secara jelas." },
+          { range: "3.0 - 3.7 (Kepujian)", desc: "Berkebolehan mengaplikasikan konsep Pemikiran Komputasional dalam pelbagai konteks sederhana." },
+          { range: "2.5 - 2.9 (Lulus)", desc: "Kebolehan mengaplikasi konsep Pemikiran Komputasional dalam konteks yang terhad." },
+          { range: "0.0 - 2.4 (Lemah)", desc: "Tidak berkebolehan mengaplikasi Pemikiran Komputasional dalam mana-mana tugasan berfikir." }
+        ]
+      },
+      RK_HP4: {
+        title: "RK_HP4: Kemahiran Interpersonal & Keyakinan",
+        max: "Skala Maksimum: 10.0 Markah",
+        levels: [
+          { range: "9.0 - 10.0 (Amat Cemerlang)", desc: "Sangat berkebolehan membina hubungan baik, berinteraksi dan bekerja secara efektif. Amat berkebolehan menyampaikan idea dengan jelas, berkesan, penuh keyakinan." },
+          { range: "7.5 - 8.9 (Cemerlang)", desc: "Berkebolehan membina hubungan, bekerja efektif, serta menyampaikan idea dengan jelas dan yakin." },
+          { range: "6.0 - 7.4 (Kepujian)", desc: "Sederhana dalam membina hubungan yang baik, berinteraksi, dan menyampaikan idea dengan keyakinan memuaskan." },
+          { range: "5.0 - 5.9 (Lulus)", desc: "Masih dapat membina hubungan baik, namun lemah dalam penyampaian idea secara meyakinkan." },
+          { range: "0.0 - 4.9 (Lemah)", desc: "Sangat lemah dalam membina hubungan interpersonal dan gagal menyampaikan idea laporan." }
+        ]
+      },
+      RK_KMI3: {
+        title: "RK_KMI3: Komunikasi & Sahsiah Suri Teladan",
+        max: "Skala Maksimum: 10.0 Markah",
+        levels: [
+          { range: "9.0 - 10.0 (Amat Cemerlang)", desc: "Cemerlang dalam komunikasi, sangat berjaya mengamalkan tingkah laku positif, memberi penghargaan, dan menjadi suri teladan terbaik bagi pelbagai situasi." },
+          { range: "7.5 - 8.9 (Cemerlang)", desc: "Baik dalam komunikasi, berjaya mengamalkan tingkah laku positif dan memberi penghargaan tinggi." },
+          { range: "6.0 - 7.4 (Kepujian)", desc: "Komunikasi agak memuaskan, dapat mengamalkan sebahagian tingkah laku positif dan penghargaan." },
+          { range: "5.0 - 5.9 (Lulus)", desc: "Kurang memuaskan dalam komunikasi dan kurang mengamalkan tingkah laku positif." },
+          { range: "0.0 - 4.9 (Lemah)", desc: "Lemah dalam komunikasi, gagal menarik minat audien, tidak berketerampilan positif." }
+        ]
+      }
+    };
+
+    // Fungsi Papar Modal Rujukan Rubrik
+    function showRubricModal(criteriaKey) {
+      const criteria = rubricData[criteriaKey];
+      if (!criteria) return;
+
+      document.getElementById('modal-rubric-title').innerHTML = `<i class="fa-solid fa-graduation-cap text-apm-orange"></i> ${criteria.title}`;
+      document.getElementById('modal-rubric-max').innerText = criteria.max;
+
+      const contentEl = document.getElementById('modal-rubric-content');
+      contentEl.innerHTML = '';
+
+      criteria.levels.forEach(lvl => {
+        contentEl.innerHTML += `
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1">
+            <span class="block font-mono font-bold text-apm-orange text-[10px] uppercase tracking-wider">${lvl.range}</span>
+            <p class="text-slate-300 leading-relaxed text-[11px]">${lvl.desc}</p>
+          </div>
+        `;
+      });
+
+      const modal = document.getElementById('rubric-modal');
+      const card = document.getElementById('rubric-modal-card');
+      
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        card.classList.remove('scale-95', 'opacity-0');
+        card.classList.add('scale-100', 'opacity-100');
+      }, 50);
+    }
+
+    // Fungsi Tutup Modal Rujukan Rubrik
+    function closeRubricModal() {
+      const modal = document.getElementById('rubric-modal');
+      const card = document.getElementById('rubric-modal-card');
+      
+      card.classList.remove('scale-100', 'opacity-100');
+      card.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
     }
 
     // Ekstrak Fail ID daripada pautan Google Drive
@@ -1018,9 +1331,6 @@
       }
     }
 
-    // ============================================================
-    // MODUL BARU: JANA ANALISIS HASIL PEMBELAJARAN (HP) KELAS
-    // ============================================================
     function renderHPTable() {
       const tbody = document.getElementById('hp-table-body');
       tbody.innerHTML = '';
@@ -1032,7 +1342,6 @@
         const amali = student.amali || {};
         const reflektif = student.reflektif || {};
 
-        // Pengiraan HP3 (Ujian Amali - 50%): PK_HP3(10) + TI_HP3a(10) + TI_HP3b(5) + PB_HP3(10) + ND_HP3(5) + KB_HP3(5) + KK_HP3(5)
         const hp3 = window.Number(amali.F?.PK_HP3 || 0) + 
                     window.Number(amali.F?.TI_HP3a || 0) + 
                     window.Number(amali.F?.TI_HP3b || 0) + 
@@ -1041,17 +1350,14 @@
                     window.Number(amali.F?.KB_HP3 || 0) + 
                     window.Number(amali.F?.KK_HP3 || 0);
 
-        // Pengiraan HP8 (Ujian Amali - 20%): PK_HP8(5) + ND_HP8(5) + KB_HP8(5) + KK_HP8(5)
         const hp8 = window.Number(amali.F?.PK_HP8 || 0) + 
                     window.Number(amali.F?.ND_HP8 || 0) + 
                     window.Number(amali.F?.KB_HP8 || 0) + 
                     window.Number(amali.F?.KK_HP8 || 0);
 
-        // Pengiraan HP2 (Laporan Reflektif - 10%): RK_HP2(5) + RK_KKG1(5)
         const hp2 = window.Number(reflektif.F?.RK_HP2 || 0) + 
                     window.Number(reflektif.F?.RK_KKG1 || 0);
 
-        // Pengiraan HP4 (Laporan Reflektif - 20%): RK_HP4(10) + RK_KMI3(10)
         const hp4 = window.Number(reflektif.F?.RK_HP4 || 0) + 
                     window.Number(reflektif.F?.RK_KMI3 || 0);
 
@@ -1080,19 +1386,16 @@
         `;
       });
 
-      // Hitung Purata Gred Kelas
       const avgHP3 = gradedCount > 0 ? (sumHP3 / gradedCount) : 0;
       const avgHP8 = gradedCount > 0 ? (sumHP8 / gradedCount) : 0;
       const avgHP2 = gradedCount > 0 ? (sumHP2 / gradedCount) : 0;
       const avgHP4 = gradedCount > 0 ? (sumHP4 / gradedCount) : 0;
 
-      // Kemaskini Kad KPI
       document.getElementById('avg-hp3-val').innerText = `${avgHP3.toFixed(2)} / 50.00`;
       document.getElementById('avg-hp8-val').innerText = `${avgHP8.toFixed(2)} / 20.00`;
       document.getElementById('avg-hp2-val').innerText = `${avgHP2.toFixed(2)} / 10.00`;
       document.getElementById('avg-hp4-val').innerText = `${avgHP4.toFixed(2)} / 20.00`;
 
-      // Kemaskini Bar Kemajuan
       document.getElementById('progress-hp3').style.width = `${(avgHP3 / 50) * 100}%`;
       document.getElementById('progress-hp8').style.width = `${(avgHP8 / 20) * 100}%`;
       document.getElementById('progress-hp2').style.width = `${(avgHP2 / 10) * 100}%`;
